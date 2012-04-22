@@ -1,0 +1,18 @@
+Testing Blogpost
+===================
+Sashan Govender
+
+Editing articles in the wordpress html editor is awkward if you already have a
+better tool. In my case I know vim fairly well and enjoy using it as a text
+editor. And I also like using asciidoc for generating articles. Fortunately the
+smart man who made
+link:http://www.methods.co.nz/asciidoc/userguide.html[asciidoc] also made
+blogpost, which wraps asciidoc output and lets you post it to wordpress blogs
+like this. This post was edited in vim on my Linux machine and posted to this
+website using blogpost like this:
+...........................
+blogpost.py post bptest.txt
+...........................
+And then it was re-edited in vim with more text and posted again via blogpost.
+Yes blogpost will remember that the text file you edited on your local machine
+is actually the source for a post on a blog somewhere on the internet.

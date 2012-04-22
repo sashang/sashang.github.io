@@ -1,0 +1,32 @@
+Using SSH to proxy HTTP traffic
+===============================
+Sashan Govender
+
+This is a neat way to setup a HTTP proxy. It lets me route HTTP traffic from my
+local machine at home through another virtual machine elsewhere on the internet
+that I administer before it makes it to the target url. On my home machine I
+just typed the following:
+
+-----------------------------------------
+ssh -f -N -D 8888 name@your-virtual-host
+-----------------------------------------
+
+This will tell ssh to listen on port 8888 on your local machine. Any connections
+to that port will be passed to the machine `your-virtual-host`. To verify that
+ssh is listening on that port type
+
+-----------------------------------------
+$netstat -tn
+Active Internet connections (w/o servers)
+Proto Recv-Q Send-Q Local Address               Foreign Address             State      
+tcp        0      0 192.168.1.10:46488          208.111.39.234:22           ESTABLISHED 
+tcp        0      0 127.0.0.1:8888              127.0.0.1:41789             ESTABLISHED 
+tcp        0      0 192.168.1.10:43547          192.168.1.102:3389          ESTABLISHED 
+tcp        0      0 192.168.1.10:46486          208.111.39.234:22           ESTABLISHED 
+------------------------------------------
+
+Then in my browser, in my case Firefox, I configured the proxy connection
+settings to use the SOCKS proxy at localhost and port 8888. Now every website I
+visit will see the connection originating from the virtual machine and not from the
+machine my browser is running on.
+

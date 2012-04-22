@@ -1,0 +1,100 @@
+How Not to Develop Software
+===========================
+Sashan Govender
+
+If I wasn't feeling so inspired by the ineptitude of others I wouldn't write
+this. However I have to vent my spleen about *bad software development
+practices*.
+
+Don't use version control
+-------------------------
+Some people just don't get version control and how it benefits software
+development. Their projects don't last long because developers get sick of
+working in that busted environment and the whole thing collapses under the
+weight of mis-management and eventually the company just folds. Typical
+arguments against it are: "Version control just gets in the way. What's the
+point when the file system is right there?" and "I can just save the file and
+fetch it from the shared drive later." and "Change history? What's that? Oh sounds
+too complicated." If anyone one on your development team is complaining about
+version control being too complicated and they don't want to use it then get rid
+of them.
+
+.Use it but don't use it properly.
+This is the corollary to the point above. This includes doing things like
+checking in an updated file with a suffix containing the new version of the
+file, like this +filename_v1+.  This is exactly what the version control system
+stops you from having to do.  Other stupid things are failing to merge properly
+and thereby getting rid of someone's changes that occurred before the merge.
+Not using the branching capabilities of the system but thinking that
+branching using +#define's+ is somehow superior. It leads to spaghetti nonsense
+garbage like this:
+
+[code,c]
+-------------------------------------------------------------------------------
+#define MY_NEW_FEATURE_1
+...
+#define MY_NEW_FEATURE_2
+...
+#endif
+...
+#define MY_NEW_FEATURE_3
+...
+#endif
+...
+#endif
+-------------------------------------------------------------------------------
+
+Additionally it doesn't work with the rest of the build system.
+
+Don't have automated builds
+---------------------------
+"Who needs automated builds? I'll just grab the executables from the different
+developer's workstation and zip it up. I'm the senior architect therefore I know
+what's best." People like this are useless. There's no guarantee that the
+development machines are all working from the same source code base, therefore
+the executables produced won't necessarily work together. Automated builds open
+the door for a continuous integration process to take place.  Unfortunately if
+you have to work with people resisting automated builds then there's no chance
+of effecting a continuous integration process.
+
+Don't build software but write documentation instead
+-----------------------------------------------------
+"Documentation is important therefore we need 10000000 lines of Word documents
+that cross-reference each sentence of each paragraph of each page. And because
+we're business analysts doing the high-level stuff we'll spend 8 months of the
+allocated year doing this. The development team can implement the system in the
+remaining 3 months by reading through our perfect documents." This approach just
+doesn't work. Documentation is costly to maintain and after a point returns very
+little value. It's costly to maintain because the more of it you have the more
+bugs are likely to slip in so keeping it bug free becomes harder. In a lot of
+ways developing ridiculously detailed documentation is similar to developing
+software but without the ability to 'compile and run' the documentation. This
+means that all the tedious error checking that normally a compiler would do is
+now done by a human resulting in an expensive waste of time.
+
+Trying to build the perfect documentation is a waste of time. There will always
+be errors or ambiguous statements. The best documentation is enough so that it
+can be passed onto a programmer who then can say, 'yes I can work with this and
+make something.' So here's a clue for the clueless in management. If given a
+month to build a software product from requirements to design to implementation
+don't generate 50 pages of documentation over 3 weeks and expect the
+implementation and testing to be done in a week. Timebox the requirements and
+design phase to 2 weeks even if the requirements and design docs aren't as
+detailed as you'd like them to be and only span 20 pages. At the end of the
+month you'll have a better chance of having a product out that you can show to
+clients. Remember, the ideal documentation is enough to be able to build
+software with and the goal is to build software.
+
+Don't automate tests
+--------------------
+Manual testing just doesn't scale. It's too much work to manually perform
+regression testing and test a new set of features for a software product. As the
+product develops the set of regression tests get larger and you end up having to
+add more manual testers to the mix just to keep up with the workload. You really
+need to automate your all tests. There's a reason why Microsoft and Google hire
+SDET (Software Development Engineer in Test) and it's because they realized that
+it's the best way to ensure a quality product. These guys don't sit around
+pushing mice and clicking buttons but develop programs to test the product
+in development.  It's a development role and suited to people who can write
+programs. Companies would be better off if they followed this approach.
+

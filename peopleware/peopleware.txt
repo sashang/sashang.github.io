@@ -1,0 +1,106 @@
+Peopleware
+==========
+Sashan Govender
+
+Peopleware is a famous book in software development circles. Opinions in the
+book are backed up by studies on software projects. In other words they're not
+of the 'I feel it therefore it's true' variety of opinion that ends up being
+misconstrued as gospel truth. I decided to read the book. The following are my
+thoughts about the points they make.
+
+
+Management tend to treat developers like cogs in the machine
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Can't really argue with this one based on my experience. Management tend to keep
+you working on what you know best, although some will try to move you around so
+you don't get stale but sometimes it's not practical from a business
+perspective. Best advice is to suck it up and do the work. It's called work
+after all, not fun and games.
+
+Project failings are never technical but political
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+I've had the experience of having to clean up a project that failed due to
+technical incompetence, so I don't quite agree with it 100%. Also I wonder if
+the reports in the data set that DeMarco and Lister used to come to this
+conclusion ended up substituting 'political' for 'technical' in order to
+preserve the egos of those involved in the technical blunders.
+
+Management would rather manage the technical details rather than the people
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Managers I've had have ranged from being technically focused, process focused,
+unfocused and 'all I need to do is tick the boxes and clock off at 5:00'
+focused. Not all of the managers I've had have come from a programming
+background which would explain the variety in focus. However, it is likely that a
+manager with a development background will be inclined to manage the technical
+aspects of the project, since that's what they know best and dealing with people
+is awkward and has unpredictable results. This doesn't imply that they can't
+be taught to concentrate less on the technical aspects of management.
+
+We don't think about the why of what we're doing
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Apparently most of those in software development, programmers and managers
+alike, don't take it upon themselves to read about their craft. In other words
+they're not reading books like Peopleware or Effective STL or whatever. Nor are
+we questioning "Why am I doing task X? I don't think it's relevant but I better
+do it cos management told me to.".
+
+Whipping doesn't work
+~~~~~~~~~~~~~~~~~~~~~
+
+You might be able to get away with whipping those that work with their hands to
+get things done faster but it doesn't work for those that need to be creative
+and thoughtful.
+
+Spanish Theory Management
+~~~~~~~~~~~~~~~~~~~~~~~~~
+Apparently the Spanish at one point in history thought that there was a fixed
+amount of value in the Earth and that by making the slaves work harder they
+could extract more value from them. On the other hand the English felt that
+value could be created through innovation. Unfortunately there are a lot of
+managers out there that subscribe to the Spanish model of economy and value and
+think that high productivity equates to making someone work 60 hours a week and
+then divide that person's output by 40 hours to get a value of productivity.
+Occasionally there may be value in doing some overtime, but if it's a regular
+occurrence then something is wrong. Additionally workers that aren't compensated
+for overtime work will take that time of unofficially.
+
+Time Pressure
+~~~~~~~~~~~~~
+A project manager was called in and gave a report stating that her project was
+going to be in on time on budget. Upper management thought about this, picked
+their noses and then decided to move the deadline forward a few months. This
+meant that people on the project worked faster but not better, leading to more
+turnover and a lower quality product.
+
+Quality and Productivity
+~~~~~~~~~~~~~~~~~~~~~~~~
+Here DeMarco and Lister argue that because we tie our self-esteem to the quality
+of the product that this is sufficient to ensure a quality product and that
+management jeopardizes this quality by placing time pressure on the developer.
+They argue that the quality that a developer will strive for is higher than what
+a user expects and if given the time the developer will meet and exceed user
+expectations. They also mention that management tends to enjoy delivering now
+because they think that the quality that a good developer strives for is far too
+high for what the market wants. However they are quite happy to release early
+then blame development afterwards. Interestingly they make a compelling argument
+that relates quality to productivity saying that increasing quality implies and
+increased productivity. An example used is Japan and the automobile market. Do
+high quality automobiles come from Japan? Is Japan a productive economy? The
+answer in both cases is yes. Intuitively good developers know that focusing on
+quality allows productivity to follow. Examples are automated testing and
+automated build systems. A little investment in setting them up now pays off
+later. It's like having the right technique for a for backhand in tennis.
+
+Parkinson's Stupidity
+~~~~~~~~~~~~~~~~~~~~~
+This is so dim witted but you'll encounter people that believe it. Basically
+Parkinson felt that if a task was going to take 2 months then he'd cut that time
+short to say a month because he reasoned that otherwise the workers would have
+too much time to muck around. The reality is different: a bad optimistic effort
+saps the developers energy because they know that they won't be able to do it in
+that time frame.
+

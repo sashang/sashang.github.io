@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="642.40625"
+   height="200"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.47 r22583"
+   sodipodi:docname="git_commit_workflow.png">
+  <defs
+     id="defs4">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       id="perspective10" />
+    <inkscape:perspective
+       id="perspective3664"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3664-7"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3726"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3752"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="372.39015"
+     inkscape:cy="-90.046755"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:snap-global="false"
+     showguides="false"
+     inkscape:window-width="1568"
+     inkscape:window-height="975"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     inkscape:window-maximized="1"
+     borderlayer="false"
+     inkscape:showpageshadow="false"
+     showborder="true">
+    <sodipodi:guide
+       position="-62.149765,-798.55097"
+       orientation="0,744.09448"
+       id="guide3700" />
+    <sodipodi:guide
+       position="681.94471,-798.55097"
+       orientation="-1052.3622,0"
+       id="guide3702" />
+    <sodipodi:guide
+       position="681.94471,253.81123"
+       orientation="0,-744.09448"
+       id="guide3704" />
+    <sodipodi:guide
+       position="-62.149765,253.81123"
+       orientation="1052.3622,0"
+       id="guide3706" />
+    <inkscape:grid
+       type="xygrid"
+       id="grid3708"
+       empspacing="5"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="true" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-62.149765,-53.811438)">
+    <text
+       xml:space="preserve"
+       style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono"
+       x="76.771599"
+       y="237.16907"
+       id="text3652"
+       sodipodi:linespacing="100%"><tspan
+         sodipodi:role="line"
+         id="tspan3654"
+         x="76.771599"
+         y="237.16907">working tree</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono"
+       x="360.74371"
+       y="233.52692"
+       id="text3652-6"
+       sodipodi:linespacing="100%"
+       inkscape:transform-center-x="145.46197"><tspan
+         sodipodi:role="line"
+         id="tspan3654-7"
+         x="360.74371"
+         y="233.52692">index</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono"
+       x="572.87579"
+       y="239.58784"
+       id="text3652-0"
+       sodipodi:linespacing="100%"><tspan
+         sodipodi:role="line"
+         id="tspan3654-4"
+         x="572.87579"
+         y="239.58784">repository</tspan><tspan
+         sodipodi:role="line"
+         x="572.87579"
+         y="259.58783"
+         id="tspan3692" /></text>
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:5;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect3694"
+       width="165.66502"
+       height="35.355339"
+       x="64.649765"
+       y="213.93558" />
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:5.93887568;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect3696"
+       width="81.893631"
+       height="43.507835"
+       x="350.99234"
+       y="207.33394" />
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:4.74679804;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect3698"
+       width="136.62379"
+       height="37.628845"
+       x="565.55884"
+       y="211.78867" />
+    <path
+       style="fill:none;stroke:#14638e;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:0.76744187;stroke-dasharray:none"
+       d="m 121.2183,207.87465 c 17.1726,-19.1929 55.55839,-45.45686 55.55839,-45.45686 l 163.64472,-1.01015 53.53808,43.43656 62.62946,-40.4061 146.47212,-1.01016 47.47717,45.45686"
+       id="path3710"
+       sodipodi:nodetypes="ccccccc" />
+    <path
+       style="fill:#14638e;fill-opacity:0.76862745;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 238.396,142.21474 1.01015,40.4061 30.30458,-21.2132 -31.31473,-19.1929 z"
+       id="path3716" />
+    <path
+       style="fill:#14638e;fill-opacity:0.76862745;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 520.73364,143.22489 1.01015,40.4061 30.30458,-21.2132 -31.31473,-19.1929 z"
+       id="path3716-4" />
+    <text
+       xml:space="preserve"
+       style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono"
+       x="213.1422"
+       y="127.06245"
+       id="text3740"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3771"
+         x="213.1422"
+         y="127.06245">git add ...</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono"
+       x="495.89417"
+       y="127.38122"
+       id="text3740-6"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3769"
+         x="495.89417"
+         y="127.38122">git commit ...</tspan></text>
+  </g>
+</svg>

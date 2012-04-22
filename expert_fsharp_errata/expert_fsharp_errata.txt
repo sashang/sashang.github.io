@@ -1,0 +1,36 @@
+Expert F# Errata
+================
+Sashan Govender
+
+It's good when you find errors in text books. It means you understand the
+subject matter. On page 231 of Expert FSharp 2.0
+
+[source,caml]
+--------------------------------------------------------------------------------
+attempt { let! n1 = failIfBig inp1
+let! n2 = failIfBig inp2
+let sum = n1 + n2
+return sum };;
+--------------------------------------------------------------------------------
+
+desugars to this:
+
+[source,caml]
+--------------------------------------------------------------------------------
+attempt.Bind( failIfBig inp1,(fun n1 ->
+attempt.Bind(failIfBig inp2,(fun n2 ->
+attempt.Return sum)))))
+--------------------------------------------------------------------------------
+
+but it should be this:
+
+[source,caml]
+--------------------------------------------------------------------------------
+attempt.Bind( failIfBig inp1,(fun n1 ->
+attempt.Bind(failIfBig inp2,(fun n2 -> let sum = n1 +  n2 in
+attempt.Return sum)))))
+--------------------------------------------------------------------------------
+
+I confirmed it on stackoverflow
+(http://stackoverflow.com/questions/6182055/is-this-a-correct-desugaring-of-the-computation-workflow)
+and via email with one of the authors (Don Syme).
