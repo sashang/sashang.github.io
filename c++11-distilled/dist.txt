@@ -1,0 +1,72 @@
+C++ 11 Distilled
+================
+Sashan Govender
+
+.distillation
+****
+the extraction of the essential meaning or most important aspects of something.
+****
+
+Types and Declarators
+---------------------
+C++ 11 introduces new types and declarators to play with.
+
+*long long*
+this was added to the C++ 11 standard although you may have bumped into it early because
+compilers supported it via an extension. It's guaranteed to be a 64 bit integer.
+
+*nullptr*
+This is a literal that has a special type that can be converted to any other type.
+[source,cpp]
+--------------------------------------------------------------------------------
+int* p = 0; //old way
+int* i = nullptr; //new way
+--------------------------------------------------------------------------------
+
+*using*
+Similar to *typedef* and can be used to define a type alias.
+[source,cpp]
+--------------------------------------------------------------------------------
+using pchar = char*;
+pchar p = nullptr;
+--------------------------------------------------------------------------------
+
+Beware the interpretation of compound types that are floating under an alias
+[source,cpp]
+--------------------------------------------------------------------------------
+using pchar = char*;
+const pchar p = nullptr; //const pointer to a char
+const char* z = nullptr;  //pointer to a char that is const
+--------------------------------------------------------------------------------
+
+*constexpr*
+Forces the compiler to check that an expression is constant.
+How does this differ from *const*?
+[source,cpp]
+--------------------------------------------------------------------------------
+const int a = f();
+constexpr int b = a + 1; //error when compiling.
+--------------------------------------------------------------------------------
+Note that the entire expression (both left and right side) must be constant if you want to use
+*constexpr*.
+
+When used with pointers it's meaning differs from *const*
+[source,cpp]
+--------------------------------------------------------------------------------
+const int* pi = nullptr;
+constexpr int* p = nullptr;
+int main()
+{
+    int i;
+    pi = &i;
+    p = &i; //error here because p is const
+}
+
+--------------------------------------------------------------------------------
+
+
+References
+----------
+[bibliography]
+- [[[1]]] Todd Veldhuizen, "Using `C++` template metaprograms," `C++` Report, May
+      1995;
