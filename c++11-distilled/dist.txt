@@ -15,7 +15,7 @@ C++ 11 introduces new types and declarators to play with.
 this was added to the C++ 11 standard although you may have bumped into it early because
 compilers supported it via an extension. It's guaranteed to be a 64 bit integer.
 
-*nullptr*
+=== nullptr
 This is a literal that has a special type that can be converted to any other type.
 [source,cpp]
 --------------------------------------------------------------------------------
@@ -23,7 +23,7 @@ int* p = 0; //old way
 int* i = nullptr; //new way
 --------------------------------------------------------------------------------
 
-*using*
+=== using
 Similar to *typedef* and can be used to define a type alias.
 [source,cpp]
 --------------------------------------------------------------------------------
@@ -39,7 +39,7 @@ const pchar p = nullptr; //const pointer to a char
 const char* z = nullptr;  //pointer to a char that is const
 --------------------------------------------------------------------------------
 
-*constexpr*
+=== constexpr
 Forces the compiler to check that an expression is constant.
 How does this differ from *const*?
 [source,cpp]
@@ -61,12 +61,49 @@ int main()
     pi = &i;
     p = &i; //error here because p is const
 }
+--------------------------------------------------------------------------------
+
+=== auto
+The *auto* keyword allows variables to be declared without knowing the type needed beforehand. It
+was introduced because the complexity of declaring types with multiple template parameters was
+burdensome.
+
+[source,cpp]
+--------------------------------------------------------------------------------
+int main(int argc, char* argv[])
+{
+    int i;
+    auto pi = &i;
+    *pi = 1;
+    const int b = 1;
+    auto pb = &b;
+    *pb = 22; //compile error
+    auto c = b; //top level const; c is of type int and not const int
+    c = 3;
+    const auto d = c;
+    d = 343; //compile error
+}
+--------------------------------------------------------------------------------
+
+This is mostly useful when you don't want to type a long declarator.
+[source,cpp]
+--------------------------------------------------------------------------------
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+int main(int argc, char* argv[])
+{
+    vector<int> v = {1,2,3};
+    for (auto m:v)
+    {
+        cout << m << endl;
+    }
+}
 
 --------------------------------------------------------------------------------
 
 
-References
-----------
-[bibliography]
-- [[[1]]] Todd Veldhuizen, "Using `C++` template metaprograms," `C++` Report, May
-      1995;
+=== decltype
+
