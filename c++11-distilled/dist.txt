@@ -11,7 +11,7 @@ Types and Declarators
 ---------------------
 C++ 11 introduces new types and declarators to play with.
 
-*long long*
+== long long
 this was added to the C++ 11 standard although you may have bumped into it early because
 compilers supported it via an extension. It's guaranteed to be a 64 bit integer.
 
@@ -96,14 +96,63 @@ using namespace std;
 int main(int argc, char* argv[])
 {
     vector<int> v = {1,2,3};
-    for (auto m:v)
+    //for (vector<int>::iterator it = v.begin(); it != v.end(); it++) - the old way
+    for (auto it = v.begin(); it != v.end(); it++)
     {
-        cout << m << endl;
+        cout << *it << endl;
     }
 }
-
 --------------------------------------------------------------------------------
 
-
 === decltype
+Useful when we want to define a type from an expression but don't want the expression to be
+executed. The difference is made clear in the example below.
+
+[source,cpp]
+--------------------------------------------------------------------------------
+#include <iostream>
+
+using namespace std;
+
+int foo()
+{
+    cout << "You won't see me" << endl;
+    return 0;
+}
+
+int bar()
+{
+    cout << "You will see me" << endl;
+    return 0;
+}
+
+
+int main(int argc, char* argv[])
+{
+    decltype(foo()) x;
+    x = 12;
+
+    auto z = bar();
+}
+--------------------------------------------------------------------------------
+
+When the expression is an lvalue enclosed in parantheses then the result is a reference type where
+the type is the the type of the expression.
+
+[source,cpp]
+--------------------------------------------------------------------------------
+#include <iostream>
+
+using namespace std;
+
+int main(int argc, char* argv[])
+{
+    int i;
+    decltype((i)) x = i; //equivalent to int& x = i;
+    i = 121;
+    cout << x << endl;
+}
+--------------------------------------------------------------------------------
+
+See section 7.1.6.2 in the C++ standard.
 
