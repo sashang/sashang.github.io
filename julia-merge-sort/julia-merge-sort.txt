@@ -7,6 +7,8 @@ I became interested in learning more about Julia because it was
 * based on LLVM (none of this JVM/Java bullshit)
 * supports first class functions
 * support for parallelization of tasks over multiple cores or nodes is built into the language
+* it is influenced by the numerical/mathematical programming languages such as R, Matlab and
+  Fortran and maybe I want to write simulations again (wishful thinking).
 
 so in the tradition of not many other first programs in a new language I wrote a
 link:https://github.com/sashang/notebook_of_code/tree/master/julia/merge-sort[merge sort routine]

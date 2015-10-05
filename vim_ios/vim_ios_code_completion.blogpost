@@ -24,7 +24,7 @@ S'http://www.zenskg.net/wordpress/?p=199'
 p11
 sS'checksum'
 p12
-S'ea55acbe77751fffd7335bac044964e2'
+S'2e60fb89a063187bd26e85ef76e263b5'
 p13
 sS'created_at'
 p14
@@ -35,7 +35,7 @@ S'article'
 p16
 sS'updated_at'
 p17
-I1311480984
+I1437146547
 sS'post_type'
 p18
 S'post'
@@ -49,16 +49,6 @@ I199
 sS'categories'
 p23
 (lp24
-S'programming'
+S'Uncategorized'
 p25
-aS'objective-c'
-p26
-aS'ios'
-p27
-aS'iphone'
-p28
-aS'ipad'
-p29
-aS'vim'
-p30
 asb.
