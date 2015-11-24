@@ -1,0 +1,47 @@
+Architecture of a Scalable Distributed System
+=============================================
+Sashan Govender
+
+x nodes
+-------
+Say we want to have a highly available service. Let's pretend it's a database.  We want it to
+tolerate a failure on the host machine so that it is still available. Simplest solution is to have
+it running on another host machine that acts as a standby. But what if numerous requests come in
+thus overloading the active database? Well let's make the standby node active as well. Now we just
+need a load balancer at the front that round robins connections from clients between the two active
+databases. Simple. No need for overly complicated redundancy policies. Now what if we want to scale
+out to three node in our cluster? Easy we just add another node, make it active and configure our
+load balancer to round robin connections between three nodes in our cluster. If one node dies the
+other two will pick up the slack. Again no need for complicated redundancy groups. But wait, you
+might ask, which database is the master? In other words, which one is the authority about the
+information stored? Surely we need consistency between values between databases? I say rethink that
+assumption. How do you think Facebook and Amazon ensure such high availability and scalability?
+(Hint: they don't ensure consistency, only that eventually the system will tend to a consistent
+state) It's up to the application designer to decide how they want data they definitely want to keep
+consistent and in the case where there is contention, it's up to the application to handle it. In
+short it becomes a user interface problem. This model is not as bad as it sounds and in practice is
+far better than trying to enforce consistency on a database that has to scale and be available. The
+alternative, forcing consistency, requires every client application to agree to the transaction that
+is about to process, thus slowing the responsiveness of every application since they all have to
+wait. This has the side effect of reducing availability. Even if the client has established a
+connection with the database service but it's waiting for the database to answer another clients
+request, that database is effectively offline. This has been thought through in the past; if it
+hadn't Amazon, Google, Facebook etc would not be in business. Even git uses this conceptual model.
+Every time we use git (https://git-scm.com/) we are sacrificing consistency and gaining availability
+and scalability. We sacrifice consistency because we can make changes to out local repository
+without informing the upstream repository. When we commit a change locally, the local and upstream
+repositories diverge. When someone else commits a change locally, all other local repositories are
+no longer in sync. Importantly git doesn't take any steps to enforce consistency. Consistency
+happens as part of the workflow and as part of the user interface. We know that our local and
+upstream repositories will eventually be consistent because after everyone pushes their local
+commits, and everyone pulls from the upstream repository, all repositories will be consisitent.
+Similarly Apache Cassandra is a database that does what I've just outlined:
+http://cassandra.apache.org/. All nodes will eventually tend towards a consistent state. The
+https://wiki.apache.org/cassandra/ArchitectureOverview has this to say: "Cassandra weak consistency
+comes in the form of eventual consistency which means the database eventually reaches a consistent
+state. As the data is replicated, the latest version of something is sitting on some node in the
+cluster, but older versions are still out there on other nodes, but eventually all nodes will see
+the latest version."
+
+
+
