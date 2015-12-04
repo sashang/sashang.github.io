@@ -195,3 +195,34 @@ then mark it with `git bisect good` otherwise mark it with `git bisect bad`.
 Keep doing this until there are 0 bisections left. The head of the tree now will
 be at the commit that introduced the change.
 
+
+Anyway, to start, find out the commit hashes within which you know the behaviour
+changed and pass them to `git start ... ` as shown below with the oldest commit
+hash first:
+
+--------------------------------------------------------
+sashan@cyclops src (no $ git bisect start 22e6ee96f2daab9b7fcc135eff8ec133579da12d 7639a06e1d7f014929a9ab22fe5a35153bf9be85
+--------------------------------------------------------
+
+git will checkout a branch with the head set to a commit in the middle of the 2
+commits identified by the hashes above. Build the program and test for the
+desired behaviour. If what you see in the new build is the desired behaviour
+then mark it with `git bisect good` otherwise mark it with `git bisect bad`.
+Keep doing this until there are 0 bisections left. The head of the tree now will
+be at the commit that introduced the change.
+
+.Rewriting History
+
+Hopefully this is something you will never need to do but sometimes people stupidly commit binaries
+and tarballs and password files into the repository. To remove them use `git filter-branch`
+
+-----------------------------------------------------
+git filter-branch -f --tree-filter \
+  "rm -rf *.tar.gz; rm -rf some/shitty/dir" \
+  --tag-name-filter "cat" --prune-empty -- --all
+-----------------------------------------------------
+
+The `tree-filter` option takes a shell command and executes it from the root of the repository. The
+option `--tag-name-filter` renames the tags. In this case `cat` is the command so the tag name
+remains the same as the original.
+

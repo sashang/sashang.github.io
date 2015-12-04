@@ -32,16 +32,18 @@ and scalability. We sacrifice consistency because we can make changes to out loc
 without informing the upstream repository. When we commit a change locally, the local and upstream
 repositories diverge. When someone else commits a change locally, all other local repositories are
 no longer in sync. Importantly git doesn't take any steps to enforce consistency. Consistency
-happens as part of the workflow and as part of the user interface. We know that our local and
-upstream repositories will eventually be consistent because after everyone pushes their local
-commits, and everyone pulls from the upstream repository, all repositories will be consisitent.
-Similarly Apache Cassandra is a database that does what I've just outlined:
-http://cassandra.apache.org/. All nodes will eventually tend towards a consistent state. The
+happens as part of the workflow and as part of the user interface. The users of git bear the
+responsibilty and do the work required to maintain consistency. We know that our local and upstream
+repositories will eventually be consistent because after everyone pushes their local commits, and
+everyone pulls from the upstream repository, all repositories will be consisitent.  Similarly Apache
+Cassandra is a database that does what I've just outlined: http://cassandra.apache.org/. All nodes
+will eventually tend towards a consistent state. The
 https://wiki.apache.org/cassandra/ArchitectureOverview has this to say: "Cassandra weak consistency
 comes in the form of eventual consistency which means the database eventually reaches a consistent
 state. As the data is replicated, the latest version of something is sitting on some node in the
 cluster, but older versions are still out there on other nodes, but eventually all nodes will see
-the latest version."
+the latest version." In Cassandra's case the applications, and not the user as is the case with git,
+bear the reposibility of resolving the conflicting case.
 
 
 
