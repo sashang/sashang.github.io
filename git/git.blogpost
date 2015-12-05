@@ -24,7 +24,7 @@ S'http://www.zenskg.net/wordpress/?p=120'
 p11
 sS'checksum'
 p12
-S'bbad406a27e3831555eed63503fd4fbe'
+S'5ec2a45efaffb49ef0d61d33b593370a'
 p13
 sS'created_at'
 p14
@@ -35,7 +35,7 @@ S'article'
 p16
 sS'updated_at'
 p17
-I1295145681
+I1449282998
 sS'post_type'
 p18
 S'post'
@@ -61,7 +61,7 @@ S'c177663364de604e61af1fa102bf2524'
 p28
 sS'filename'
 p29
-S'/home/sashan/code/www.zenskg.net/git/git_commit_workflow.png'
+S'/home/sashan/code/articles/git/git_commit_workflow.png'
 p30
 sbssS'id'
 p31
@@ -69,10 +69,6 @@ I120
 sS'categories'
 p32
 (lp33
-S'git'
+S'Uncategorized'
 p34
-aS'programming'
-p35
-aS'note to self'
-p36
 asb.
