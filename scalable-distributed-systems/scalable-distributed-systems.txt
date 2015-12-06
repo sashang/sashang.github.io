@@ -1,9 +1,20 @@
-Architecture of a Scalable Distributed System
-=============================================
+Xnodes - Architecture of a Scalable Distributed System
+======================================================
 Sashan Govender
 
-x nodes
--------
+== What is XNodes
+*A distributed highly available heterogeneous manageable system.*
+
+* *Distributed.* Nodes in the system can be geographically distant. They need not be on the same
+  local area network.
+* *Highly Available.* Services running in the system are highly available. The loss of one instance
+  of a service does not affect the delivery of the service. Overloading one instance of a service
+  does not block clients from using that service.
+* *Heterogeneous.* Nodes in the system do not have to be on the same hardware.
+* *Manageable.* Facilities provided for the installation of applications their upgrade and downgrade with
+  preservation of transforms to that applications configuration.
+
+.Availability or 99.9999% uptime
 Say we want to have a highly available service. Let's pretend it's a database.  We want it to
 tolerate a failure on the host machine so that it is still available. Simplest solution is to have
 it running on another host machine that acts as a standby. But what if numerous requests come in
@@ -12,38 +23,66 @@ need a load balancer at the front that round robins connections from clients bet
 databases. Simple. No need for overly complicated redundancy policies. Now what if we want to scale
 out to three node in our cluster? Easy we just add another node, make it active and configure our
 load balancer to round robin connections between three nodes in our cluster. If one node dies the
-other two will pick up the slack. Again no need for complicated redundancy groups. But wait, you
-might ask, which database is the master? In other words, which one is the authority about the
-information stored? Surely we need consistency between values between databases? I say rethink that
-assumption. How do you think Facebook and Amazon ensure such high availability and scalability?
-(Hint: they don't ensure consistency, only that eventually the system will tend to a consistent
-state) It's up to the application designer to decide how they want data they definitely want to keep
-consistent and in the case where there is contention, it's up to the application to handle it. In
-short it becomes a user interface problem. This model is not as bad as it sounds and in practice is
-far better than trying to enforce consistency on a database that has to scale and be available. The
-alternative, forcing consistency, requires every client application to agree to the transaction that
-is about to process, thus slowing the responsiveness of every application since they all have to
-wait. This has the side effect of reducing availability. Even if the client has established a
-connection with the database service but it's waiting for the database to answer another clients
-request, that database is effectively offline. This has been thought through in the past; if it
-hadn't Amazon, Google, Facebook etc would not be in business. Even git uses this conceptual model.
-Every time we use git (https://git-scm.com/) we are sacrificing consistency and gaining availability
-and scalability. We sacrifice consistency because we can make changes to out local repository
-without informing the upstream repository. When we commit a change locally, the local and upstream
-repositories diverge. When someone else commits a change locally, all other local repositories are
-no longer in sync. Importantly git doesn't take any steps to enforce consistency. Consistency
-happens as part of the workflow and as part of the user interface. The users of git bear the
-responsibilty and do the work required to maintain consistency. We know that our local and upstream
-repositories will eventually be consistent because after everyone pushes their local commits, and
-everyone pulls from the upstream repository, all repositories will be consisitent.  Similarly Apache
-Cassandra is a database that does what I've just outlined: http://cassandra.apache.org/. All nodes
-will eventually tend towards a consistent state. The
-https://wiki.apache.org/cassandra/ArchitectureOverview has this to say: "Cassandra weak consistency
-comes in the form of eventual consistency which means the database eventually reaches a consistent
-state. As the data is replicated, the latest version of something is sitting on some node in the
-cluster, but older versions are still out there on other nodes, but eventually all nodes will see
-the latest version." In Cassandra's case the applications, and not the user as is the case with git,
-bear the reposibility of resolving the conflicting case.
+other two will pick up the slack. Again no need for complicated redundancy groups. Availabilty is
+ensured by having multiple instances of the service running at any one time.
+
+.Data consistency
+Ok great so we have a cluster of nodes and we have a way to ensure that a service is always
+available.  But what about the configuration data of that service? In other words, which node is the
+authority about the information stored? And if we have a service running on multiple nodes surely
+all instances of the same service should share the same view of the data? Surely we need consistency
+between values between databases?  I say rethink that assumption. How do you think Facebook and
+Amazon ensure such high availability and scalability?  (Hint: they don't ensure consistency, only
+that eventually the system will tend to a consistent state) It's up to the application designer to
+decide which part of their data they definitely want to keep consistent and in the case where there
+is contention, it's up to the application to handle it. In short it becomes a user interface
+problem. This model is not as bad as it sounds and in practice is far better than trying to enforce
+consistency on a database that has to scale and be available. The alternative, forcing consistency,
+requires every client application to agree to the transaction that is about to process, thus slowing
+the responsiveness of every application since they all have to wait. This has the side effect of
+reducing availability.  Even if the client has established a connection with the database service
+but it's waiting for the database to answer another clients request, that database is effectively
+offline. This has been thought through in the past; if it hadn't Amazon, Google, Facebook etc would
+not be in business.  Even git uses this conceptual model.  Every time we use git
+(https://git-scm.com/) we are sacrificing consistency and gaining availability and scalability. We
+sacrifice consistency because we can make changes to out local repository without informing the
+upstream repository. When we commit a change locally, the local and upstream repositories diverge.
+When someone else commits a change locally, all other local repositories are no longer in sync.
+Importantly git doesn't take any steps to enforce consistency.  Consistency happens as part of the
+workflow and as part of the user interface.  The users of git bear the responsibilty and do the work
+required to maintain consistency. We know that our local and upstream repositories will eventually
+be consistent because after everyone pushes their local commits, and everyone pulls from the
+upstream repository, all repositories will be consisitent.  Similarly Apache Cassandra is a database
+that does what I've just outlined: http://cassandra.apache.org/. All nodes will eventually tend
+towards a consistent state.  The https://wiki.apache.org/cassandra/ArchitectureOverview has this to
+say: "Cassandra weak consistency comes in the form of eventual consistency which means the database
+eventually reaches a consistent state. As the data is replicated, the latest version of something is
+sitting on some node in the cluster, but older versions are still out there on other nodes, but
+eventually all nodes will see the latest version." In Cassandra's case the applications, and not the
+user as is the case with git, bear the reposibility of resolving the conflicting case.
+
+== Hypothetical Use Cases
+To give you an idea of what Xnodes helps with the following use cases are outlined below as a
+thought experiment.
+
+.Running a web server
+The typical scenario is an organization running a web server that delivers content to external
+clients. Xnodes will manage changes to the configuration of the server. Transforms to the services
+config are preserved so that a rollback can be performed. Additionally a snapshot of the  content
+associated with that instance of the config is taken. This allows a proper rollback of the data.
+It's not sufficient to only record the configuration changes. Dependencies between configuration and
+associated binaries are also tracked. For example assume that the Apache Web Server (httpd) has a
+dependency on OpenSSL. The current system is running version A of httpd and version A of libssh2.
+Then one day OpenSSL implements version 320 of the TLS protocol and release version B of openssl.
+Later, the Apache developers release a version, B, of httpd that supports version B of openssl. They
+also add another key in the httpd.conf configuration file. This means that this config can only work
+with version B of httpd and requires the new version of the openssl shared object on the host
+machine. Anyway the system admin performs the upgrade, installing version B of httpd and version B
+of openssl and updating the httpd.conf file to use the new configuration option. A few days later,
+for some reason, they decided to rollback httpd. Xnodes allows them to do this safely because the
+configuration data associated with version A of httpd is preserved.
 
 
-
+.Installing software
+.Upgrading
+.Downgrading
