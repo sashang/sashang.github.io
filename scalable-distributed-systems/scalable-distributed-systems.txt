@@ -68,7 +68,7 @@ thought experiment.
 .Running a web server
 The typical scenario is an organization running a web server that delivers content to external
 clients. Xnodes will manage changes to the configuration of the server. Transforms to the services
-config are preserved so that a rollback can be performed. Additionally a snapshot of the  content
+config are preserved so that a rollback can be performed. Additionally a snapshot of the content
 associated with that instance of the config is taken. This allows a proper rollback of the data.
 It's not sufficient to only record the configuration changes. Dependencies between configuration and
 associated binaries are also tracked. For example assume that the Apache Web Server (httpd) has a
@@ -80,9 +80,23 @@ with version B of httpd and requires the new version of the openssl shared objec
 machine. Anyway the system admin performs the upgrade, installing version B of httpd and version B
 of openssl and updating the httpd.conf file to use the new configuration option. A few days later,
 for some reason, they decided to rollback httpd. Xnodes allows them to do this safely because the
-configuration data associated with version A of httpd is preserved.
-
+configuration data associated with version A of httpd is preserved. This state becomes the state
+that all nodes in the system will tend to. Content can also be snapshot to the version of the
+software installed.
 
 .Installing software
+Installing a new piece of software changes the configured state of the system. Software is first
+installed on any node in the system and then the other nodes follow that node automatically install
+the software. In cases where the installation fails an alarm is raised.
+
 .Upgrading
+Upgrading changes the configured state of an existing software package. The old state is snapshot
+(including config data and content), the binaries updated and new config replaced. Configuration
+transforms are executed. Again this is done on a single node in the xnode system first. All other
+nodes then tend to this nodes configuration.
+
 .Downgrading
+The software binaries are downgraded to the previous version. The previous configured state is
+restored. Other nodes tend to this configuration.
+
+
