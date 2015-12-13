@@ -628,8 +628,8 @@ $ if [ -n "$something" ]; then echo "not empty"; fi
 ------------------
 
 ==== and or not
-If statements favourite logical operators are `and`, `or` and `not`. These can be represented in
-shell programming as follows:
+The test program takes special arguments that represent `and`, `or` and `not`. These are shown
+below:
 
 .not
 ------------
@@ -646,7 +646,7 @@ if [ 1 -a 2 ]
 if [ 1 -o 2 ]
 ------------
 
-`not` is simply a `!`. `and` you pass the argument -a to test. `or` you pass test the `-o` argument.
+`not` is simply a `!`. `and` you pass the argument `-a` to test. `or` you pass test the `-o` argument.
 In shell programming it's best to think about the `[` not as a keyword or and operator that the
 language consumes as part of it's grammar. It's a command, a synonym for `test`, that like any other
 command takes a list of parameters. The closing bracket `]` is just syntactic sugar.
@@ -665,13 +665,26 @@ Checking the man pages for test shows that it cannot. Therefore the problem is `
 what a `||` is. However the following works:
 
 ------------
-if [ true ] || [ false ]; then echo "yes"; fi
+if true || false; then echo "yes"; fi
 ------------
 
 In this case `test` is simply being used to execute `true` and the `||` is not part of the list of
-arguments passed to `test`. Instead it's evaluated by the interpreter.
+arguments passed to `test`. Instead it's evaluated by the interpreter. In this context the `||`
+operator joins 2 command lists. Similarly the `&&` operator can be used to join 2 command lists with
+a logical and. The interpreter will perform short circuit evaluation. For example the following is
+an idiom you might see used from time to time in shell scripts.
 
-==== The [[ operator (bash only)
+------------
+somecommand || exit 1 
+------------
+
+If `somecommand` fails then the call to `exit 1` is made and the script will terminate with a return
+code of `1`. Remember that in shell programming return codes of `0` are good and non-zero return
+codes are bad. If `somecommand` returns 0 then the `exit 1` will not be performed due to short
+circuit evaluation kicking in.
+
+
+=== The [[ operator (Bash only)
 Bash adds a operator `[[` and this can change how tests are written. If portability is a concern
 this operator should not be included in your scripts. The operators that work with `test` also work
 with `[[`. It has adds features that make testing expressions more convenient. For example there is
@@ -689,10 +702,66 @@ fi
 
 will do what you expect and echo `yes` to stdout.
 
-C-like operators `&&` and `||` can be used.
+C-like operators `&&` and `||` can be used. Note that in this context the meaning of the operators
+is different from when they are used to join command lists.
 
-=== Case Statements
-Describe case statements
+=== Case Conditional Construct
+
+Case statements are another way to perform selection but the various guards in the case construct
+can be patterns.
+
+The construct looks like this:
+
+[source,bash]
+------------
+#!/bin/bash
+
+myvar=$1
+case $myvar in
+  one)
+    echo 1;;
+  two)
+    echo 2;;
+  *)
+    echo "undefined"
+esac
+------------
+
+The last guard in the case construct is how the default case is handled in shell programming. `*` is
+a pattern that matches any string.
+
+The `?` below means match any character. It will match `one` or `o2e` etc...
+[source,bash]
+------------
+#!/bin/bash
+
+myvar=$1
+case $myvar in
+  o?e)
+    echo 1;;
+  two)
+    echo 2;;
+  *)
+    echo "undefined"
+esac
+------------
+
+To match literally enclose the pattering in `"`. For example:
+
+[source,bash]
+------------
+#!/bin/bash
+case $myvar in
+  "o?e")
+    echo 1;;
+  two)
+    echo 2;;
+  *)
+    echo "undefined"
+esac
+------------
+
+will match the string "o?e" only.
 
 == Iteration
 Describe iteration
