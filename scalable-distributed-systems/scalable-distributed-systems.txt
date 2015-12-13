@@ -2,7 +2,10 @@ Xnodes - Architecture of a Scalable Distributed System
 ======================================================
 Sashan Govender
 
-== What is XNodes
+Note that this document is a work in progress and represent my ideas about how a scalable
+distributed HA system should work.
+
+== What is Xnodes
 *A distributed highly available heterogeneous manageable system.*
 
 * *Distributed.* Nodes in the system can be geographically distant. They need not be on the same
@@ -10,8 +13,9 @@ Sashan Govender
 * *Highly Available.* Services running in the system are highly available. The loss of one instance
   of a service does not affect the delivery of the service. Overloading one instance of a service
   does not block clients from using that service.
-* *Heterogeneous.* Nodes in the system do not have to be on the same hardware.
-* *Manageable.* Facilities provided for the installation of applications their upgrade and downgrade with
+* *Heterogeneous.* Nodes in the system do not have to be on the same hardware or same version of
+  software.
+* *Manageable.* Facilities provided for the installation of applications, their upgrade and downgrade with
   preservation of transforms to that applications configuration.
 
 .Availability or 99.9999% uptime
@@ -24,7 +28,9 @@ databases. Simple. No need for overly complicated redundancy policies. Now what 
 out to three node in our cluster? Easy we just add another node, make it active and configure our
 load balancer to round robin connections between three nodes in our cluster. If one node dies the
 other two will pick up the slack. Again no need for complicated redundancy groups. Availabilty is
-ensured by having multiple instances of the service running at any one time.
+ensured by having multiple instances of the service running at any one time. If the services need
+some sort of logic to decide who is the master instance they can build themselves or Xnodes can
+provide a service that makes that decision.
 
 .Data consistency
 Ok great so we have a cluster of nodes and we have a way to ensure that a service is always
@@ -79,10 +85,11 @@ also add another key in the httpd.conf configuration file. This means that this 
 with version B of httpd and requires the new version of the openssl shared object on the host
 machine. Anyway the system admin performs the upgrade, installing version B of httpd and version B
 of openssl and updating the httpd.conf file to use the new configuration option. A few days later,
-for some reason, they decided to rollback httpd. Xnodes allows them to do this safely because the
-configuration data associated with version A of httpd is preserved. This state becomes the state
-that all nodes in the system will tend to. Content can also be snapshot to the version of the
-software installed.
+for some reason, they decided to rollback httpd. Maybe and exploit was discovered in the latest
+version of httpd, something they couldn't test for before upgrading. Xnodes allows them to do this
+safely because the configuration data associated with version A of httpd is preserved. This state
+becomes the state that all nodes in the system will tend to. Content can also be snapshot to the
+version of the software installed.
 
 .Installing software
 Installing a new piece of software changes the configured state of the system. Software is first
@@ -99,4 +106,31 @@ nodes then tend to this nodes configuration.
 The software binaries are downgraded to the previous version. The previous configured state is
 restored. Other nodes tend to this configuration.
 
+.Removal
+The application binaries are removed from the running instance of the node. Configuration state is
+preserved. All nodes will tend to this new state. A system admin can always rollback the system
+config to a time where the application was installed.
+
+.In production testing
+Say you want to role out the latest version of Wordpress. You have an Xnode system running but want to
+test this latest version of Wordpress. Xnodes will allow you to 1) select the nodes to isolate 2)
+role out the upgrade to Wordpress on isolated nodes. Then you can test the new version of Wordpress
+by configuring your network to redirect a percentage of requests to the isolated set of nodes.
+
+== Configuration data
+The Xnodes in memory database is simply a key value database. It is intended to store system
+configuration information, like the packages installed on the Xnodes system, their configuration.
+Changes to the configuration are not immediately synchronized. By trading consistency this allows
+Xnodes to provide scalabilty and availabilty. The following is a quote from the OpenSAF IMM
+Programmers Guide and describes a design Xnodes DOES NOT implement:
+__________________________________________________________________________________________________
+"During the time when sync is in progress, the IMMSv is not writable.  The IMMNDs will reject any
+request that implies a mutation to the repository with SA_AIS_ERR_TRY_AGAIN. Read requests are of
+course still serviced. Updates to cached non-persistent runtime attributes are also allowed during
+sync."
+__________________________________________________________________________________________________
+
+== Open Issues
+How are services that require redundancy but every instance of the service can't be in use handled?
+For example how would Xnodes handle a dhcp service?
 
