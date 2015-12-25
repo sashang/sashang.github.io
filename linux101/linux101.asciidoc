@@ -746,7 +746,7 @@ case $myvar in
 esac
 ------------
 
-To match literally enclose the pattering in `"`. For example:
+To match literally enclose the pattern in `"`. For example:
 
 [source,bash]
 ------------
@@ -779,9 +779,13 @@ Recursion examples
 
 Stuff about pipes, redirection, async background init, fg, bg.
 
+[[regexp]]
 == Regular Expressions
 
-Insert text about regular expressions
+Regular expressions tend to be the bane of every new programmer's life because a typical expression
+looks like noise. You just have to retrain your brain to see the characters and not expect words
+with spaces as delimiters. After a while it becomes intelligible. The hard part then is knowing
+which variant of the regex
 
 [[file_system]]
 == Permissions and the Linux Filesystem
