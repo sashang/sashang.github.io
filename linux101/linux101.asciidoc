@@ -2,6 +2,8 @@ Bash and the Linux Developer's Work Environment
 ===============================================
 :Author: Sashan Govender
 :Email: sashang@gmail.com
+:source-highlighter: pygments
+:icons: font
 
 //{include:footnotes.txt}
 :fn1: footnote:[A bad habit new Linux users make is to login as root and proceed to do work +
@@ -28,6 +30,8 @@ joke I made up.]
 :fn8: footnote:['less is more' is a saying in English where we mean that something is better when +
 there is less of it. For example a pizza with twenty toppings is not necessarily better than a pizza +
 with five.]
+
+:fn9: footnote:[POSIX.1-2008 http://pubs.opengroup.org/onlinepubs/9699919799/]
 
 == Introduction
 This document is intended to get the reader familiar with working on a Linux machine and therefore
@@ -690,6 +694,7 @@ this operator should not be included in your scripts. The operators that work wi
 with `[[`. It has adds features that make testing expressions more convenient. For example there is
 no need to enclose string variables within `"`. For example, 
 
+.Bash only
 [source,bash]
 ------------
 #!/bin/bash
@@ -784,11 +789,67 @@ Stuff about pipes, redirection, async background init, fg, bg.
 
 Regular expressions tend to be the bane of every new programmer's life because a typical expression
 looks like noise. You just have to retrain your brain to see the characters and not expect words
-with spaces as delimiters. After a while it becomes intelligible. The hard part then is knowing
-which variant of the regex
+with spaces as delimiters. After some practice and learning what the metacharacters mean it becomes
+intelligible. The basic idea behind regular expressions is that it's a pattern matching language.
+You describe a pattern using the regular expression syntax and that matches a variety of concrete
+realizations of that pattern.
+
+In this chapter we will illustrate the application of the POSIX regular expressions, both the basic
+and extended variants, using the programs `grep` and `sed`. Since we are working on Linux there are
+some extensions that the GNU foundation have added to `grep` that are not part of the POSIX
+standard. These will be noted so you can write portable shell scripts that work on a variety of Unix
+like operating systems. `grep` stands for `general regular expression` but it's often used as a verb
+in sentences. For example an engineer might often say 'I grepped for the string' when searching for
+some text in a file. `sed` stands for `stream editor`. It allows you to match text using regular
+expressions and then perform a transformation, like capitalization or substitutioon, on the matched.
+`grep` only searches for a pattern in a file and does not allow one to change the text. 
+
+=== Basic Expressions
+
+A simple expression is one that contains no special characters and matches literally. For
+example, 
+
+------------------------------
+$ grep "ab" regexp-test-file.txt 
+ab
+abad
+------------------------------
+
+`grep`, without any parameters to modify its behaviour, will match the pattern in each line and if a
+match is found, it will print the whole line. However, most of the time what people want to find is
+the line with that whole word on it, and not the lines where the word is part of another larger
+word. Unfortunately the POSIX specification for basic regular expressions doesn't define a
+metacharacter that represents word boundaries. To do this use `grep -w`.
+
+[GNU]
+====
+-------------------------------
+$ grep -w "ab" regexp-test-file.txt 
+ab cd
+-------------------------------
+
+One can also use the special characters `\>` that mark the end of the word.
+
+-------------------------------
+$ grep "ab\>" regexp-test-file.txt 
+ab cd
+-------------------------------
+====
+
+But what if I wanted to find all words starting with 'ax' and I didn't care about the 3rd character
+and the last 
+
+=== Extended Expressions
+
+Extended expressions
+
+=== Summary of Metacharacters
+
+.`.`
+The `.` character matches any single character.
 
 [[file_system]]
-== Permissions and the Linux Filesystem
+== Permissions and the Linux File System
 
 Insert text about permissions
 
