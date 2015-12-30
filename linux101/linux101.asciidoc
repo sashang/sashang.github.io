@@ -1,5 +1,5 @@
-Bash and the Linux Developer's Work Environment
-===============================================
+Shell Programming and the Linux Developer's Work Environment
+============================================================
 :Author: Sashan Govender
 :Email: sashang@gmail.com
 :source-highlighter: pygments
@@ -335,6 +335,10 @@ To remove the variable use `unset`.
 -----------------
 $ unset myvar
 -----------------
+
+== Arithmetic
+
+TODO
 
 == Selection
 Not surprisingly Bash has `if` statements that allow you to make a selection. The complexity comes
@@ -690,9 +694,9 @@ circuit evaluation kicking in.
 
 === The [[ operator (Bash only)
 Bash adds a operator `[[` and this can change how tests are written. If portability is a concern
-this operator should not be included in your scripts. The operators that work with `test` also work
-with `[[`. It has adds features that make testing expressions more convenient. For example there is
-no need to enclose string variables within `"`. For example, 
+this operator should not be included in your scripts. The arguments that work with `test` also work
+with `[[`. It adds features that make testing expressions more convenient. For example there is
+no need to enclose string variables within `"`.
 
 .Bash only
 [source,bash]
@@ -705,7 +709,7 @@ if [[ $myvar = "one two" ]]; then
 fi
 ------------
 
-will do what you expect and echo `yes` to stdout.
+Will do what you expect and echo `yes` to stdout.
 
 C-like operators `&&` and `||` can be used. Note that in this context the meaning of the operators
 is different from when they are used to join command lists.
@@ -768,14 +772,64 @@ esac
 
 will match the string "o?e" only.
 
+The pattern matching notation is based on the regular expression notation (see <<regexp>>).
+
 == Iteration
-Describe iteration
+
+Iteration is the name associated with the set of constructs used to repeat statements.
 
 === While
-While examples
+An example while loop is shown below. The first part of the while loop is a command or a list of
+commands. It executes while the command list is true.
+
+[source,bash]
+------------
+#!/bin/bash
+count=0
+while [ $count -lt 10 ]; do
+    echo $count
+    count=$((count + 1))
+done
+------------
+
+Like the `if` construct, a `while` construct can take a command list. For example,
+
+[source,bash]
+------------
+#!/bin/bash
+count=0
+i=0
+while [ $count -lt 10 ] && [ $i -lt 5 ]; do
+    echo "$count, $i"
+    count=$((count + 1))
+    i=$((i + 1))
+done
+------------
+
+.Bash only - the [[ operator
+
+Not surprisingly a while loop can also use the `[[` operator.
 
 === For
-For examples
+
+The `for` loop does not take a command list. Instead it takes a variable that is set to the value in
+the given word list at each iteration of the loop.
+
+[source,bash]
+------------
+#!/bin/bash
+for x in one two; do
+  echo $x
+done
+------------
+
+results in the following on stdout:
+
+------------
+one
+two
+------------
+
 
 === Recursion
 Recursion examples
@@ -915,7 +969,8 @@ solved hardly exists theses days, but in the past terminals rarely supported scr
 text scrolled passed the top line on the screen you could not 'page up' to read it again. A pager
 buffered this text so that you could 'page up' and read it. Another pager is `more` but `less` is
 better. The man page for `more` recommends using `less`. In fact the maxim 'less is more' really
-does apply {fn7} {fn8}. It's worth memorizing the key bindings to move around in `less`.
+does apply {fn7} {fn8}. It's worth memorizing the key bindings to move around in `less`. They are
+the same as Vim.
 
 .Key bindings
 [width="40%",frame="topbot",options="header,footer"]
