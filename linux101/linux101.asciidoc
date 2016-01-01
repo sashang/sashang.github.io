@@ -1,5 +1,5 @@
-Shell Programming and the Linux Developer's Work Environment
-============================================================
+Shell Scripting and the Linux Developer's Work Environment
+==========================================================
 :Author: Sashan Govender
 :Email: sashang@gmail.com
 :source-highlighter: pygments
@@ -33,16 +33,40 @@ with five.]
 
 :fn9: footnote:[POSIX.1-2008 http://pubs.opengroup.org/onlinepubs/9699919799/]
 
-== Introduction
+:fn10: footnote:[I haven't checked the source code but it's probably read by the [ program. I +
+doubt the shell interpreter parses it.]
+
+:fn11: footnote:[Also known as a 'kappie' in some parts of the world.]
+
+
+== Preface
 This document is intended to get the reader familiar with working on a Linux machine and therefore
 any Unix machine. It's assumed that the reader is familiar with at least one other programming
 language and understands concepts like functions, parameters, return values, types, scope and other
-terminology that comes with general programming. Differences between the Bourne Again Shell and the
-POSIX compliant shell language will be marked with text `bash only`. This should help the reader
-differentiate between constructs that will work with one interpreter and not the other.  In short,
-if you are a programmer that hasn't used Linux or any Unix based computer before, didn't know what
-Bash stood for, or feel that references on the internet are not clear about the boundary between
-features in Bash and those in the POSIX shell language, then this document is for you.
+terminology that comes with programming. Differences between the Bourne Again Shell and the POSIX
+compliant shell language will be marked with text like the following:
+
+[NOTE]
+.Bash Extension
+======================
+This stuff only works in Bash...
+======================
+
+This should help the reader differentiate between constructs that will work with one interpreter and
+not the other.  In short, if you are a programmer that hasn't used Linux or any Unix based computer
+before, didn't know what Bash stood for, or feel that references on the internet are not clear about
+the boundary between features in Bash and those in the POSIX shell language, then this document is
+for you.
+
+Motivation for writing this came from years of working without a decent reference to work from or to
+point other programmers to. Learning how to do things via results found on the internet would often
+lead to shallow learning. There are many guides out there that are nothing more than a collection of
+tricks that one can copy and paste but there doesn't seem to exist a shell scripting guide that
+addresses the fundamentals of shell scripting. Shell scripting seems to fall in the gap of things
+programmers learn as a side effect of doing their real job. When learning shell programming I was
+puzzled by why if statements don't behave like if statements in other languages and why variables
+seemed to have a mind of their own. Answers to these questions came not from cookbook aproaches to
+shell scripting but from a better understanding of its fundamentals.
 
 === History
 What do we mean when we say 'Linux'? It depends who you are talking to, but colloquially if someone
@@ -335,10 +359,6 @@ To remove the variable use `unset`.
 -----------------
 $ unset myvar
 -----------------
-
-== Arithmetic
-
-TODO
 
 == Selection
 Not surprisingly Bash has `if` statements that allow you to make a selection. The complexity comes
@@ -657,7 +677,7 @@ if [ 1 -o 2 ]
 `not` is simply a `!`. `and` you pass the argument `-a` to test. `or` you pass test the `-o` argument.
 In shell programming it's best to think about the `[` not as a keyword or and operator that the
 language consumes as part of it's grammar. It's a command, a synonym for `test`, that like any other
-command takes a list of parameters. The closing bracket `]` is just syntactic sugar.
+command takes a list of parameters. The closing bracket `]` is just syntactic sugar {fn10}.
 
 ==== && and ||
 These operators *are* part of the shell language, but they do not work as you might expect them to.
@@ -676,11 +696,9 @@ what a `||` is. However the following works:
 if true || false; then echo "yes"; fi
 ------------
 
-In this case `test` is simply being used to execute `true` and the `||` is not part of the list of
-arguments passed to `test`. Instead it's evaluated by the interpreter. In this context the `||`
-operator joins 2 command lists. Similarly the `&&` operator can be used to join 2 command lists with
-a logical and. The interpreter will perform short circuit evaluation. For example the following is
-an idiom you might see used from time to time in shell scripts.
+In this context the `||` operator joins 2 command lists. Similarly the `&&` operator can be used to
+join 2 command lists with a logical and. The interpreter will perform short circuit evaluation. For
+example the following is an idiom you might see used from time to time in shell scripts.
 
 ------------
 somecommand || exit 1 
@@ -691,14 +709,14 @@ code of `1`. Remember that in shell programming return codes of `0` are good and
 codes are bad. If `somecommand` returns 0 then the `exit 1` will not be performed due to short
 circuit evaluation kicking in.
 
-
-=== The [[ operator (Bash only)
+[NOTE]
+.Bash Extension
+======================
 Bash adds a operator `[[` and this can change how tests are written. If portability is a concern
-this operator should not be included in your scripts. The arguments that work with `test` also work
-with `[[`. It adds features that make testing expressions more convenient. For example there is
-no need to enclose string variables within `"`.
+this operator should not be included in your scripts. The operators that work with `test` also work
+with `[[`. It adds features that make conditional expressions more C like. For example there is no
+need to enclose string variables within `"`.
 
-.Bash only
 [source,bash]
 ------------
 #!/bin/bash
@@ -709,10 +727,11 @@ if [[ $myvar = "one two" ]]; then
 fi
 ------------
 
-Will do what you expect and echo `yes` to stdout.
+will do what you expect and echo `yes` to stdout.
 
 C-like operators `&&` and `||` can be used. Note that in this context the meaning of the operators
 is different from when they are used to join command lists.
+======================
 
 === Case Conditional Construct
 
@@ -772,64 +791,14 @@ esac
 
 will match the string "o?e" only.
 
-The pattern matching notation is based on the regular expression notation (see <<regexp>>).
-
 == Iteration
-
-Iteration is the name associated with the set of constructs used to repeat statements.
+Describe iteration
 
 === While
-An example while loop is shown below. The first part of the while loop is a command or a list of
-commands. It executes while the command list is true.
-
-[source,bash]
-------------
-#!/bin/bash
-count=0
-while [ $count -lt 10 ]; do
-    echo $count
-    count=$((count + 1))
-done
-------------
-
-Like the `if` construct, a `while` construct can take a command list. For example,
-
-[source,bash]
-------------
-#!/bin/bash
-count=0
-i=0
-while [ $count -lt 10 ] && [ $i -lt 5 ]; do
-    echo "$count, $i"
-    count=$((count + 1))
-    i=$((i + 1))
-done
-------------
-
-.Bash only - the [[ operator
-
-Not surprisingly a while loop can also use the `[[` operator.
+While examples
 
 === For
-
-The `for` loop does not take a command list. Instead it takes a variable that is set to the value in
-the given word list at each iteration of the loop.
-
-[source,bash]
-------------
-#!/bin/bash
-for x in one two; do
-  echo $x
-done
-------------
-
-results in the following on stdout:
-
-------------
-one
-two
-------------
-
+For examples
 
 === Recursion
 Recursion examples
@@ -856,7 +825,8 @@ like operating systems. `grep` stands for `general regular expression` but it's 
 in sentences. For example an engineer might often say 'I grepped for the string' when searching for
 some text in a file. `sed` stands for `stream editor`. It allows you to match text using regular
 expressions and then perform a transformation, like capitalization or substitutioon, on the matched.
-`grep` only searches for a pattern in a file and does not allow one to change the text. 
+`grep` only searches for a pattern in each line of a file and does not allow one to change the text.
+It prints the line containing the match.
 
 === Basic Expressions
 
@@ -864,43 +834,122 @@ A simple expression is one that contains no special characters and matches liter
 example, 
 
 ------------------------------
-$ grep "ab" regexp-test-file.txt 
-ab
-abad
+$ grep "is" summertime-ending.txt 
+“It used to be that he, John, had too little employment. Now that is about to change. Now he will
+have as much employment as he can handle, as much and more. He is going to have to abandon some of
+his personal projects and be a nurse. Alternatively, if he will not be a nurse, he must announce to
+his father: I cannot face the prospect of ministering to you day and night. I am going to abandon
+you. Goodbye. One or the other: there is no third way.”
 ------------------------------
 
 `grep`, without any parameters to modify its behaviour, will match the pattern in each line and if a
-match is found, it will print the whole line. However, most of the time what people want to find is
-the line with that whole word on it, and not the lines where the word is part of another larger
-word. Unfortunately the POSIX specification for basic regular expressions doesn't define a
-metacharacter that represents word boundaries. To do this use `grep -w`.
+match is found, it will print the whole line. As you can see from the example above it matches where
+`is` is part of a word.
 
-[GNU]
-====
+[NOTE]
+.GNU Extension
+=================================
+Sometimes what people want to find is the line with that whole word on it, and not the lines where
+the word is part of another larger word.  Unfortunately the POSIX specification for basic regular
+expressions doesn't define a metacharacter that represents word boundaries. To do this use `grep
+-w`.
 -------------------------------
-$ grep -w "ab" regexp-test-file.txt 
-ab cd
+$ grep -w "is" summertime-ending.txt 
+“It used to be that he, John, had too little employment. Now that is about to change. Now he will
+have as much employment as he can handle, as much and more. He is going to have to abandon some of
+you. Goodbye. One or the other: there is no third way.”
 -------------------------------
 
-One can also use the special characters `\>` that mark the end of the word.
+One can also use the special characters `\<` and  `\>` that mark the start and end of a word.
 
 -------------------------------
-$ grep "ab\>" regexp-test-file.txt 
-ab cd
+$ grep "\<is\>" summertime-ending.txt 
+“It used to be that he, John, had too little employment. Now that is about to change. Now he will
+have as much employment as he can handle, as much and more. He is going to have to abandon some of
+you. Goodbye. One or the other: there is no third way.”
 -------------------------------
-====
 
-But what if I wanted to find all words starting with 'ax' and I didn't care about the 3rd character
-and the last 
+=================================
 
-=== Extended Expressions
+==== Special characters
 
-Extended expressions
+The Dot or Period `.`::
 
-=== Summary of Metacharacters
+The special character `.` means match any character. Thus when used in the following regex `hi.` it
+will match `hit` or `him` or a `hi`  followed by a space. Note that only the first 3 letters are
+matched in `hilt` and similarly in a word like `shilling` it's only the letters at positions 2,3,4
+that are matched.
 
-.`.`
-The `.` character matches any single character.
+The Asterisk or Kleene Star `*`::
+
+The asterisk (or Kleene star) matches 0 or more of the preceeding character. For example `a*`
+matches `a` or `aa` or `aaa`. The match is greedy meaning that it will match the largest possible
+number of characters.
+
+The Circumflex or Hat {fn11} `^`::
+
+The circumflex (or hat) matches the start of a line. The expression `^you` will only match `you` if
+it is at the start of a line.
+
+The Dollar `$`::
+
+The dollar matches the end of a line. 
+
+Parentheses `\(` and `\)`::
+
+Parentheses group sub-expressions into a group that can be refered to within the same expression using
+`\n`, where `n` is the nth group in the entire expression.
+
+Braces `\{` and `\}`::
+
+These braces are used to form interval expressions. An interval expression modoifies the number of
+times the preceding expression needs to match. For example `\{1,3\}` says match the preceding
+expression 1 to 3 times. Again, matching is greedy so if the option exists to match 1 or 2 or 3
+repetitions of the preceeding pattern, the largest valid match is returned.
+
+Square brackets `[` and `]`::
+
+The square brackets form a bracket expression and are used to create a set of characters where the
+sequence does not matter.  For example the expression `[ab]` matches strings "a" or "b".
+Importantly the characters `.`, `*`, `[`, and `\` lose their special meaning within bracket
+expressions. Therefore expression like `[a.b]` will match "a" or "." or "b" but not any other
+character. The restrictions on `[` and `\` prevent one from nesting bracket expressions.
+
+
+=== Extended Regular Expressions
+
+Extended regular expressions include the special characters listed above and introduce the following special characters:
+
+Question mark `?`::
+This matches 0 or 1 of the preceding expression.
+
+Plus `+`::
+This matches 1 or more of the preceding expression.
+
+Bar or Vertical Line or Pipe `|`::
+A regular expression that consists of two expressions separated by this symbol matches a string that
+contains one of the expressions. 
+
+Confusingly if using extended regular expressions you don't need to escape the `{` or the `(`. For
+example this ERE `(ab)` is equivalent to this BRE `\(ab\)`. In other words the parentheses have
+special meaning by default, without a backslash preceding it. To search for parentheses and braces
+literally use a backslash in an ERE. For example `\(ab\)` matches `(ab)`
+
+`grep` by default uses BRE but passing `-E` to it will enable extended regular expressions.
+
+=== Putting it all together.
+
+Now that we've covered the theoretical part of regular expressions lets use them in some examples.
+In the examples we will use the ERE syntax. In addition to `grep` we will also use the program `sed`
+to search and replace.
+
+
+.Find occurrences of `and`
+============================
+grep -E "and" 
+============================
+
+
 
 [[file_system]]
 == Permissions and the Linux File System
@@ -969,8 +1018,7 @@ solved hardly exists theses days, but in the past terminals rarely supported scr
 text scrolled passed the top line on the screen you could not 'page up' to read it again. A pager
 buffered this text so that you could 'page up' and read it. Another pager is `more` but `less` is
 better. The man page for `more` recommends using `less`. In fact the maxim 'less is more' really
-does apply {fn7} {fn8}. It's worth memorizing the key bindings to move around in `less`. They are
-the same as Vim.
+does apply {fn7} {fn8}. It's worth memorizing the key bindings to move around in `less`.
 
 .Key bindings
 [width="40%",frame="topbot",options="header,footer"]
