@@ -2,7 +2,6 @@ Shell Scripting and the Linux Developer's Work Environment
 ==========================================================
 :Author: Sashan Govender
 :Email: sashang@gmail.com
-:source-highlighter: pygments
 :icons: font
 
 //{include:footnotes.txt}
@@ -944,13 +943,80 @@ In the examples we will use the ERE syntax. In addition to `grep` we will also u
 to search and replace.
 
 
-.Find occurrences of `and`
+.Find events in the syslog that happened around the 30 minute mark of the hour
+
 ============================
-grep -E "and" 
+Assuming that a time stamped line the log file looks like:
+
+--------------------
+Jan 01 17:35:45 phoenix NetworkManager[351]: <info>    server identifier 192.168.0.1
+---------------------
+
+This will print out events timestamped within 5 minutes of the 30 minute mark.
+
+grep -E "[0-2][0-9]:(2[5-9]|3[0-5]):" logfile
+
 ============================
 
+.Swap function parameters
+
+============================
+
+Assume you have a function declaration like this:
+
+[source, c]
+-------------
+void foo(int a, char c);
+-------------
+
+that has changed to this:
+
+[source, c]
+-------------
+void foo(char c, int a);
+-------------
+
+now calls to the original function will no longer compile due to a type mismatch. You need to
+rewrite them so that the char variable is in the first parameter position. Can we solve this using a
+regex? Yes we can! Consider the following examples of function calls.
+
+[source, c]
+--------------
+foo(a, b);
+foo(someval, someval1);
+foo(asok_askdjas, pioqw_asd);
+foo(some_char, some_int);
+--------------
+
+The following expression given to `sed` will swap the parameters.
+
+--------------
+sed -r -e "s/foo\(([0-9a-zA-Z_ ]+), ([0-9a-zA-Z_ ]+)\);/foo\(\2, \1\);/"
+--------------
+
+It probably deserves some explanation. `-r` turns on extended regular expressions. `-e` is the sed
+script to run. The first parameter in the sed script `s` stands for `substitute`. It tells sed to
+expect a search string and a replacement string. The second character (the first forward slash) `/`
+is a delimeter. It delimits the search string from the replacement string and the end of the script.
+sed accepts any character for a delimiter. We could have rewritten the above expression using an `@`
+symbol instead:
+
+--------------
+sed -r -e "s@foo\(([0-9a-zA-Z_ ]+), ([0-9a-zA-Z_ ]+)\);@foo\(\2, \1\);@"
+--------------
+
+After the first delimiter the expression to find is given. This is just the function name, `foo`,
+followed by an opening parenthesis `\(`. Then the next parenthesis `(` marks the beginning of the
+first grouped sub-expression. A bracket expression describing the set of characters permitted in a C
+identifier follows. Then we quantify it with a `+`, meaning that we want 1 or more of the preceding
+characters. Then we close the first group with a `)`. The next expression is similar and matches the
+second parameter of the function. It is also enclosed in group. Then we hit the delimiter that marks
+the end of the search expression and the beginning of the replacement expression. The replacemanet
+expression simply makes use of the grouped expressions in the search expression, and refers to the
+second and first groups using `\2` and `\1` respectively.
 
 
+============================
 [[file_system]]
 == Permissions and the Linux File System
 
