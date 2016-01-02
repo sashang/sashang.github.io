@@ -1006,16 +1006,18 @@ sed -r -e "s@foo\(([0-9a-zA-Z_ ]+), ([0-9a-zA-Z_ ]+)\);@foo\(\2, \1\);@"
 --------------
 
 After the first delimiter the expression to find is given. This is just the function name, `foo`,
-followed by an opening parenthesis `\(`. Then the next parenthesis `(` marks the beginning of the
-first grouped sub-expression. A bracket expression describing the set of characters permitted in a C
-identifier follows. Then we quantify it with a `+`, meaning that we want 1 or more of the preceding
-characters. Then we close the first group with a `)`. The next expression is similar and matches the
-second parameter of the function. It is also enclosed in group. Then we hit the delimiter that marks
-the end of the search expression and the beginning of the replacement expression. The replacemanet
-expression simply makes use of the grouped expressions in the search expression, and refers to the
-second and first groups using `\2` and `\1` respectively. There are some shortcommings with the
-above expression. One is that it relies on uniform spacing between identifiers and tokens in the
-code that is being transformed. For example it will not match this:
+followed by an opening parenthesis `\(` that we need to escape with a backslash because we are
+using extended regular expressions and we want to match literally. Then the next parenthesis `(` is
+special and marks the beginning of the first grouped sub-expression. A bracket expression describing
+the set of characters permitted in a C identifier follows. Then we quantify it with a `+`, meaning
+that we want 1 or more of the preceding characters. Then we close the first group with a `)`. The
+next expression is similar and matches the second parameter of the function. It is also enclosed in
+group. Then we hit the delimiter that marks the end of the search expression and the beginning of
+the replacement expression. The replacemanet expression simply makes use of the grouped expressions
+in the search expression, and refers to the second and first groups using `\2` and `\1`
+respectively. There are some shortcommings with the above expression. One is that it relies on
+uniform spacing between identifiers and tokens in the code that is being transformed. For example it
+will not match this:
 
 --------------
 foo (some_char, some_int);
