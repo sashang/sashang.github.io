@@ -1013,8 +1013,18 @@ characters. Then we close the first group with a `)`. The next expression is sim
 second parameter of the function. It is also enclosed in group. Then we hit the delimiter that marks
 the end of the search expression and the beginning of the replacement expression. The replacemanet
 expression simply makes use of the grouped expressions in the search expression, and refers to the
-second and first groups using `\2` and `\1` respectively.
+second and first groups using `\2` and `\1` respectively. There are some shortcommings with the
+above expression. One is that it relies on uniform spacing between identifiers and tokens in the
+code that is being transformed. For example it will not match this:
 
+--------------
+foo (some_char, some_int);
+--------------
+
+because of the space between the `foo` and `(`. There are a few ways to remedy this: 
+
+- you could rewrite the expression to handle whitespace or
+- strip the whitespace then process the functions.
 
 ============================
 [[file_system]]
