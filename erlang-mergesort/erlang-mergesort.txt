@@ -1,0 +1,24 @@
+Mergesort in Erlang
+===================
+Sashan Govender
+
+Still looking around for a language that would make sense for my next project, I've decided to look
+into Erlang.
+
+* It's a functional programming language.
+* Predated Scala and the new wave of functional languages. In fact those languages are probably more
+  influenced by Erlang.
+* Inherently designed to support concurrent distributed processing on a large scale, although I
+  doubt it can do the fine grained multicore shared memory stuff Julia could do.
+* More suited to tasks that require parallel processing using message duplication as the primary
+  way to share pass information. Don't use it for computationally intensive stuff.
+
+So in the tradition of not many other first programs in a new language I wrote a
+link:https://github.com/sashang/notebook_of_code/tree/master/erlang-mergesort[merge sort routine]
+
+Some of the funky stuff I bumped up against:
+
+* Seemingly bizzare usage of `,`, `;` and `.` as statement terminators. It reminded me of
+  programming in OCaml.
+* `if` statements aren't like anything I've ever seen before.
+
