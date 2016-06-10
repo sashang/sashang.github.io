@@ -65,7 +65,9 @@ say: "Cassandra weak consistency comes in the form of eventual consistency which
 eventually reaches a consistent state. As the data is replicated, the latest version of something is
 sitting on some node in the cluster, but older versions are still out there on other nodes, but
 eventually all nodes will see the latest version." In Cassandra's case the applications, and not the
-user as is the case with git, bear the reposibility of resolving the conflicting case.
+user as is the case with git, bear the reposibility of resolving the conflicting case. For another
+view on the tradeoff between data consistency see 
+https://highlyscalable.wordpress.com/2012/09/18/distributed-algorithms-in-nosql-databases/.
 
 == Hypothetical Use Cases
 To give you an idea of what Xnodes helps with the following use cases are outlined below as a

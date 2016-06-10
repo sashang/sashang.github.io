@@ -2,7 +2,7 @@ Mergesort in Erlang
 ===================
 Sashan Govender
 
-Still looking around for a language that would make sense for my next project, I've decided to look
+Looking around for a language that would make sense for my next project, I've decided to look
 into Erlang.
 
 * It's a functional programming language.
@@ -21,4 +21,7 @@ Some of the funky stuff I bumped up against:
 * Seemingly bizzare usage of `,`, `;` and `.` as statement terminators. It reminded me of
   programming in OCaml.
 * `if` statements aren't like anything I've ever seen before.
+* Nice pattern matching. Love pattern matching in a language; it lets you break apart the shape of
+  the data structure so easily.
+* Concurrent process handling is so sweet.
 
