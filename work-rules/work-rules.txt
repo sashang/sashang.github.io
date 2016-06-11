@@ -41,9 +41,9 @@ generally collaborates to create a data model for this piece of software, since 
 model you gain an understanding about how this thing will operate. In these cases there might be
 disagreement about a field; should it be in class A or in class B and one group really wants it in
 class A and the other really wants it in class B and there's no technical reason why one is better
-than the other, yet it results in less cost one the group that gets their wish in the future. It
+than the other, yet it results in less cost to the group that gets their wish in the future. It
 would have been interesting to see how these deadlocks are resolved, other than 'Hire better
-people', which seems to be the maxim when all else fails and which wouldn't work in these scenarios.
+people', which seems to be the maxim when all else fails but wouldn't work in these scenarios.
 
 == Hiring
 *Quite simply Google doesn't hire based on experience*. Why? Because the data tells them that
