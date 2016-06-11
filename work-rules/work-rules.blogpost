@@ -24,7 +24,7 @@ S'http://www.zenskg.net/wordpress/?p=369'
 p11
 sS'checksum'
 p12
-S'300c4130bb6ee74d32ec877338e04e1f'
+S'8ed6c0fa7c773717c56358fcd730ed19'
 p13
 sS'created_at'
 p14
@@ -35,7 +35,7 @@ S'article'
 p16
 sS'updated_at'
 p17
-I1465649152
+I1465649640
 sS'post_type'
 p18
 S'post'
@@ -49,4 +49,6 @@ I369
 sS'categories'
 p23
 (lp24
-sb.
+S'Uncategorized'
+p25
+asb.
