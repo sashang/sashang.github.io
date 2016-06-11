@@ -19,7 +19,7 @@ with to make the read interesting, but thankfully the book isn't simply a collec
 begin with 'in my experience' or the retelling of someone else's experience in order to justify the
 introduction of a work policy affecting staff. Nor does he make the mistake of drawing general
 conclusions based on his own experience. Almost every piece of general advice in the book is backed
-by data and and referenced research that corroborates any story he might tell. There is a core
+by data and referenced research that corroborates any story he might tell. There is a core
 emphasis on making decisions based on data that comes across through the entire book. When running
 an organization like Google that has 50000 staff you have a pretty decent sample set on which to
 carry out experiments. Couple that with Google's innate ability to extract information from raw data
@@ -33,7 +33,7 @@ like debugging, coding or the differences between functional languages and imper
 are a software development manager you won't find anything about agile versus waterfall or managing
 clients expectations. However as an engineer or manager there is a lot of information in it that
 lends itself to improving the quality of your work life experience. After all work is 1/3 of your
-life, so telling yourself that 'oh it's just a job', is a lie that you use to supress the fact that
+life, so telling yourself that 'oh it's just a job', is a lie that you use to suppress the fact that
 it's 1/3 of your life you are putting into it. You owe it to yourself to try and make that 1/3
 meaningful. What I thought was missing from the book was something about conflict resolution. For
 example if two groups have to implement something they need to share the use of in the future, one
@@ -72,8 +72,8 @@ and sorting algorithms you will struggle to catch up to someone who has speciali
 any other field for that matter, given that they both have the similar level of fundamental ability.
 This correlates with how I feel as well; I've known this to be true since my early 20's when
 starting out in the industry yet constantly was held back based on lack of experience. It becomes an
-execuse for management to not pay people what they are worth and to over pay incompetent experienced
-people. Now, in my late 30's, I still see the problems caused by hiring based soley on experience
+excuse for management to not pay people what they are worth and to over pay incompetent experienced
+people. Now, in my late 30's, I still see the problems caused by hiring based only on experience
 amongst engineers. *Experience without ability is useless.* With regard to jobs that require
 soft skills and where work sample test is not possible, then there is little advice in the book
 other than 'hire someone who is better than you in some way', and then how that is assessed I'm
@@ -86,7 +86,7 @@ whatever subject they do and they're all winners because they tried. Reality doe
 Imagine if doctors were evaluated based on trying? "Oh well you cut the wrong artery but you tried
 so you pass. Congratulations." Training programs can't compensate for bad hires; they'll upset the
 good staff, the ones who already know what they are doing, and the ones that can't think and apply
-what they learn will not benefit as much as the orginazation assumes. Processes will kill innovation
+what they learn will not benefit as much as the organization assumes. Processes will kill innovation
 by stifling free thought and increasing barriers to getting the job done. Additionally you are not
 going to elevate an incompetent person by giving them a bullet proof process to follow, unless their
 job is trivial. Let's run a thought experiment and start by assuming it is true that a well
@@ -95,26 +95,30 @@ a problem in the quality of the work done by some programmers. To address it you
 to make the job of programming easier. The process covers all sorts of things about programming and
 a nice fat document is the result containing exhaustive list of code scenarios and solutions, like
 when to use a pointer, when to delete it, when to break a function into smaller functions, when to
-use certain data structures. Even better this magic document specfies the exact code to write when
+use certain data structures. Even better this magic document specifies the exact code to write when
 faced with a problem, like how to find a file or how to connect to any web API. Then you implement
-this process and distribute the magic document. Your subpar programmers are now empowered and their
+this process and distribute the magic document. Your sub par programmers are now empowered and their
 code improves because they have a document that tells them exactly what to write when to write it.
 Obviously there are a few things wrong here. The document would be impossible to produce; yes there
 is a finite (it's finite because there'll be a limit dictated by the hardware on the number of bytes
 in a program) set of programs that can exist but the set is so large you would need to be omniscient
 to produce such a thing. Moreover, all you have succeeded in doing is turning your so called
 software engineer into a typist, yet they are being paid to be software engineers. This doesn't make
-sense.
+sense and thankfully there's enough in the book to argue that processes can't remedy bad hires.
 
-So how does Google hire? Initially they relied on referalls which resulted in lots of people from
+[quote,Laszlo Bock,Work Rules]
+The presence of a huge training budget is not evidence that you’re investing in your people. It’s
+evidence that you failed to hire the right people to begin with.
+
+So how does Google hire? Initially they relied on referrals which resulted in lots of people from
 the same clique joining. As the organization grew their process expanded and they became less
 reliant on the pedigree of the institution that the candidate graduated from, an admission to the
-reality that smart people exist everywhere but not every smart person's parents have the means to
-enroll at Stanford. Traditional recruiters struggled with the Google requirement of 'smart
-generalist' when the recruitment industry was and still is expecting with buzzwords. Their process
-is arduous involving 4 or 5 layers of interviews which can span months. Each stage in the process
-has a specific focus. Eventually a candidate's portfolio is reviewed by Larry Page who can veto if
-he chooses.
+reality that smart people exist everywhere but not every smart person's parents have the money to
+fund a Stanford education. Traditional recruiters struggled with the Google requirement of 'smart
+generalist' when the recruitment industry was and still is expecting buzzwords. Their process is
+arduous involving 4 or 5 layers of interviews which can span months. Each stage in the process has a
+specific focus. Eventually a candidate's portfolio is reviewed by Larry Page who can veto if he
+chooses.
 
 [quote,Laszlo Bock,Work Rules]
 If the Senior Leader Review is supportive, then Larry is sent each week’s recommended hires. The
@@ -126,5 +130,24 @@ shown in a portfolio might not be up to snuff.
 See, creativity is important.
 
 == Benefits
-Most of Google's benefits don't cost them anything. Laundry service, day care, haircuts are all paid
-for by staff 
+Most of Google's benefits don't cost them anything. Laundry service, day care, haircuts, car
+services are all paid for by staff. The only thing Google does is bring the service on campus making
+it accessible and thus reducing the cost by negotiating volume discounts. Obviously the size of the
+Google campus makes this possible and I'd be surprised if this was available in all their offices
+worldwide. It makes sense to provide these services since coming home after a hard days work to do
+them is just tedious and boring and simply not something you want to do.
+
+The highest costs to the company is the food, shuttle service and subsidized child care.
+Interestingly they use the kitchen to fuel innovation. Innovation within a tightly knit team dies
+over time. New ideas are needed as input to fuel new innovations and the kitchen area is a natural
+social gathering place where interaction can take place across teams. Therefore in the long run the
+free food probably pays for itself, although I doubt there's any data on how many lunch dates it
+took Bob from AI and Rob from Graphics to concoct a new gizmo.
+
+In summary the benefits are a collection of little things that cost the comp
+
+[quote,Laszlo Bock,Work Rules]
+Most of the programs we use to delight and care for Googlers are free, or very close to it.
+
+== Management
+
