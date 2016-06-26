@@ -136,3 +136,13 @@ ________________________________________________________________________________
 How are services that require redundancy but every instance of the service can't be in use handled?
 For example how would Xnodes handle a dhcp service?
 
+== Links
+
+Beating the CAP Theorem Checklist[http://ferd.ca/beating-the-cap-theorem-checklist.html]
+
+Times, Clocks and the Ordering of Events in a Distributed
+System[http://research.microsoft.com/en-us/um/people/lamport/pubs/time-clocks.pdf]
+
+Byzantine Generals[http://research.microsoft.com/en-us/um/people/lamport/pubs/byz.pdf]
+
+CAP 12 years later[https://www.infoq.com/articles/cap-twelve-years-later-how-the-rules-have-changed]

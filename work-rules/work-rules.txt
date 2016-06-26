@@ -115,10 +115,10 @@ the same clique joining. As the organization grew their process expanded and the
 reliant on the pedigree of the institution that the candidate graduated from, an admission to the
 reality that smart people exist everywhere but not every smart person's parents have the money to
 fund a Stanford education. Traditional recruiters struggled with the Google requirement of 'smart
-generalist' when the recruitment industry was and still is expecting buzzwords. Their process is
-arduous involving 4 or 5 layers of interviews which can span months. Each stage in the process has a
-specific focus. Eventually a candidate's portfolio is reviewed by Larry Page who can veto if he
-chooses.
+generalist' when the recruitment industry was and still is expecting buzzwords. The hiring process
+is arduous involving 4 or 5 layers of interviews which can span months. Each stage in the process
+has a specific focus. Eventually a candidate's portfolio is reviewed by Larry Page who can veto if
+he chooses.
 
 [quote,Laszlo Bock,Work Rules]
 If the Senior Leader Review is supportive, then Larry is sent each week’s recommended hires. The
@@ -140,14 +140,17 @@ them is just tedious and boring and simply not something you want to do.
 The highest costs to the company is the food, shuttle service and subsidized child care.
 Interestingly they use the kitchen to fuel innovation. Innovation within a tightly knit team dies
 over time. New ideas are needed as input to fuel new innovations and the kitchen area is a natural
-social gathering place where interaction can take place across teams. Therefore in the long run the
-free food probably pays for itself, although I doubt there's any data on how many lunch dates it
+social gathering place where interaction can take place across teams. Therefore over time there is a
+return on the investment in free food, although I doubt there's any data on how many lunch dates it
 took Bob from AI and Rob from Graphics to concoct a new gizmo.
 
-In summary the benefits are a collection of little things that cost the comp
+In summary the benefits are a collection of little things that cost the company little.
 
 [quote,Laszlo Bock,Work Rules]
 Most of the programs we use to delight and care for Googlers are free, or very close to it.
 
 == Management
+
+.About 
+This article was written using Vim in Asciidoc.
 
