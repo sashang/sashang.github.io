@@ -1,0 +1,77 @@
+No Debugging Programming in Elixir
+==================================
+Sashan Govender
+
+At last I have found a language that I do not need to debug. I can just write the code and have it
+run on the input data, and it will give me the correct result. The language is
+link:Elixir[elixir-lang.org]. This is the Holy Grail!
+
+So this is what happened. I'm studying algorithms and doing a course and one of the assignments was
+to write a inversion counter. So what's an inversion? It's basically where, in a list of numbers, a
+number is out of sequence with respect to another number in the list.
+
+.Example of no inversions
+.......................
+[1,2,3,4]
+.......................
+
+.Example of inversion. Here 3 is out of order.
+.......................
+[1,3,2,4]
+.......................
+
+.Here there are 6 inversions.
+.......................
+[4,3,2,1]
+.......................
+
+A brute force algorithm that calculates this would have check each number against all the numbers in
+the list and therefore would be `O(n^2)` which is inefficient. The trick is to piggyback on
+mergesort which has a running time of `O(nlogn)`. The reason this works is because during the merge
+step of the mergesort we detect inversions. When writing the larger array from the two
+subarrays the process 'detects' inversions every time you find an element in the left array that is
+larger than one in the right array. At the end of the day a few subtle modifications to the
+mergesort algorithm is all that's needed. And that's what I did in Elixir. I stumbled along and
+my tired fingers and sore eyes cranked out some Elixir. The biggest surprise was it worked
+(ignoring compilation errors) right from the start. I didn't have an input case that produced the
+wrong answer for the assignment. I didn't have to go back and rewrite any of the pattern matches. I
+didn't have to fix the recursion because I'd put the calls in the right place. Here it is.
+
+---------------------------------
+defmodule Inversion do
+
+  def summarize(a, b, acc, list_acc) do
+    case {a, b} do
+      {[], []} -> {list_acc, acc}
+      {a, []} -> {list_acc ++ a, acc}
+      {[], b} -> {list_acc ++ b, acc}
+      {a,b} when hd(a) > hd(b) -> summarize(a, tl(b), length(a) + acc, list_acc ++ [hd(b)])
+      {a,b} when hd(a) <= hd(b) -> summarize(tl(a), b, acc, list_acc ++ [hd(a)])
+    end
+  end
+
+  def count_inversion(a) do
+    case a do
+      [] -> {[], 0}
+      [x] -> {[x], 0}
+      [x,y] when x > y -> {[y,x], 1}
+      [x,y] when x <= y -> {[x,y], 0}
+      a -> 
+        n = length(a)
+        half = div(n, 2)
+        {sorted_b, x} = count_inversion(Enum.slice(a, (0 .. half-1)))
+        {sorted_c, y} = count_inversion(Enum.slice(a, half..n-1))
+        {sorted_a, z} = summarize(sorted_b, sorted_c, 0, [])
+        {sorted_a, x + y + z}
+    end
+  end
+
+  def read(filename) do
+    data = File.read!(filename)
+    l = String.split(String.trim(data), "\n")
+    l = Enum.map(l, fn(x) -> String.to_integer(x) end)
+    {sorted, ans} = count_inversion(l)
+    ans
+  end
+end
+---------------------------------

@@ -120,11 +120,12 @@ role out the upgrade to Wordpress on isolated nodes. Then you can test the new v
 by configuring your network to redirect a percentage of requests to the isolated set of nodes.
 
 == Configuration data
-The Xnodes in memory database is simply a key value database. It is intended to store system
-configuration information, like the packages installed on the Xnodes system, their configuration.
-Changes to the configuration are not immediately synchronized. By trading consistency this allows
-Xnodes to provide scalabilty and availabilty. The following is a quote from the OpenSAF IMM
-Programmers Guide and describes a design Xnodes DOES NOT implement:
+The Xnodes database is Riak. It is intended to store system configuration information, like the
+packages installed on the Xnodes system, their configuration. Changes to the configuration are not
+immediately synchronized. Instead, because of the way Riak works, the state of the system will
+eventually become consistent. By trading consistency this allows Xnodes to provide scalabilty and
+availabilty. The following is a quote from the OpenSAF IMM Programmers Guide and describes a design
+Xnodes will avoid:
 __________________________________________________________________________________________________
 "During the time when sync is in progress, the IMMSv is not writable.  The IMMNDs will reject any
 request that implies a mutation to the repository with SA_AIS_ERR_TRY_AGAIN. Read requests are of
