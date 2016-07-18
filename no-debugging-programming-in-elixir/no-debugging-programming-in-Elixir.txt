@@ -37,41 +37,18 @@ my tired fingers and sore eyes cranked out some Elixir. The biggest surprise was
 wrong answer for the assignment. I didn't have to go back and rewrite any of the pattern matches. I
 didn't have to fix the recursion because I'd put the calls in the right place. Here it is.
 
----------------------------------
-defmodule Inversion do
+++++
+<script src="https://gist.github.com/sashang/91ead48d2a5c51103279600c8759112b.js"></script>
+++++
 
-  def summarize(a, b, acc, list_acc) do
-    case {a, b} do
-      {[], []} -> {list_acc, acc}
-      {a, []} -> {list_acc ++ a, acc}
-      {[], b} -> {list_acc ++ b, acc}
-      {a,b} when hd(a) > hd(b) -> summarize(a, tl(b), length(a) + acc, list_acc ++ [hd(b)])
-      {a,b} when hd(a) <= hd(b) -> summarize(tl(a), b, acc, list_acc ++ [hd(a)])
-    end
-  end
+The problem with the solution above is it is slow. On an input set of 100000 numbers it took 30
+seconds to compute. It contains a 'hidden' operation that makes the summarize function `O(n^2)`. The
+'hidden' operation is the `++` that appends the element to the end of the list. To do this it has to
+walk to the end of the list, which is an `O(n)` operation thus turning the `summarize` function from
+an `O(n)` operation to an `O(n^2)` function. The way to fix it is to prepend the head on the list
+and then reverse the list later as shown below.
 
-  def count_inversion(a) do
-    case a do
-      [] -> {[], 0}
-      [x] -> {[x], 0}
-      [x,y] when x > y -> {[y,x], 1}
-      [x,y] when x <= y -> {[x,y], 0}
-      a -> 
-        n = length(a)
-        half = div(n, 2)
-        {sorted_b, x} = count_inversion(Enum.slice(a, (0 .. half-1)))
-        {sorted_c, y} = count_inversion(Enum.slice(a, half..n-1))
-        {sorted_a, z} = summarize(sorted_b, sorted_c, 0, [])
-        {sorted_a, x + y + z}
-    end
-  end
+++++
+<script src="https://gist.github.com/sashang/f8654ed2f08560b183f6971f7d6dc872.js"></script>
+++++
 
-  def read(filename) do
-    data = File.read!(filename)
-    l = String.split(String.trim(data), "\n")
-    l = Enum.map(l, fn(x) -> String.to_integer(x) end)
-    {sorted, ans} = count_inversion(l)
-    ans
-  end
-end
----------------------------------
