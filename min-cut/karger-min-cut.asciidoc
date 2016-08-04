@@ -35,7 +35,7 @@ probabilty of getting the mimimum cut.
 
 My first attempt at this was in `C++`. I modelled the adjacency list of vertices using a vector and
 each element contained a vector of edges that were connected to the vertex. Each edge contained two
-endpoints which were pointers to vertices. The adjaceny list of edges was a vector of these edges.
+endpoints which were pointers to vertices. The adjacency list of edges was a vector of these edges.
 My first attempt didn't work. I got my head in spin trying to logically reason about pointers to
 vertices to edges that contained pointers to vertices, and the whole thing didn't work properly. I
 was surprised that I couldn't get it right, and frustrated since I'd spent a few days on it.
