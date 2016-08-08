@@ -1,12 +1,19 @@
-Xnodes - Architecture of a Scalable Distributed System
+Enodes - Architecture of a Scalable Distributed System
 ======================================================
 Sashan Govender
 
 Note that this document is a work in progress and represent my ideas about how a scalable
-distributed HA system should work.
+distributed highly available cluster should work.
 
-== What is Xnodes
-*A distributed highly available heterogeneous manageable system.*
+== What is Enodes
+* *A platform to enable a distributed highly available heterogeneous manageable cluster.*
+
+* *A platform for Internet of Things devices.*
+
+* *A platform for building network elements.*
+
+Let's analyze the first description. There are a lot of terms in the sentence 'A platform to enable
+a distributed highly available heterogeneous manageable cluster.' that need to be defined.
 
 * *Distributed.* Nodes in the system can be geographically distant. They need not be on the same
   local area network.
@@ -17,6 +24,7 @@ distributed HA system should work.
   software.
 * *Manageable.* Facilities provided for the installation of applications, their upgrade and downgrade with
   preservation of transforms to that applications configuration.
+* *Cluster.* A set of computing units or nodes connected in a network.
 
 .Availability or 99.9999% uptime
 Say we want to have a highly available service. Let's pretend it's a database.  We want it to
@@ -29,7 +37,7 @@ out to three node in our cluster? Easy we just add another node, make it active 
 load balancer to round robin connections between three nodes in our cluster. If one node dies the
 other two will pick up the slack. Again no need for complicated redundancy groups. Availabilty is
 ensured by having multiple instances of the service running at any one time. If the services need
-some sort of logic to decide who is the master instance they can build themselves or Xnodes can
+some sort of logic to decide who is the master instance they can build themselves or Enodes can
 provide a service that makes that decision.
 
 .Data consistency
@@ -69,13 +77,67 @@ user as is the case with git, bear the reposibility of resolving the conflicting
 view on the tradeoff between data consistency see 
 https://highlyscalable.wordpress.com/2012/09/18/distributed-algorithms-in-nosql-databases/.
 
+== Databases
+
+These are the properties we want a configuration database to satisfy.
+
+* Scale from 1 to thousands of nodes.
+* High availability.
+* Eventually consistent (always allow writes).
+* Tolerate network partitions.
+* Throughput and speed of read/write transactions isn't a concern. It's intended to be used as a
+  configuration database and configuration data doesn't change frequently.
+
+=== SQL
+Traditional SQL databases are strongly consistent and can be made highly available. They tend to be
+run on a handful of top of the line servers depending on application demands. Scaling out with them
+is hard as they favour strong consistency, so the more servers you add, the more time it takes for
+the service as a whole to maintain it's consitency guarantees on transactions. They would be
+unsuitable for the enodes platform, since we require horizontal scalability. 
+
+=== NoSQL
+
+.Key Value database
+These are database like Riak and Redis that store keys and values. Simple queries are
+straightforward but more complicated queries like 'I want key x if key y satisfies some condition'
+require more code on the application side. Essentially the application has to implement the code
+that SQL queries give you for free. However the benefit of these databases is that they scale
+horizontally very easily, work well as a cache, and are good for structureless/schemaless data.
+
+.Graph databases
+Theses databases are specialized to store information in a graph. They are application specific and
+used to model a social network or where there is a graph like structure. I've got a feeling that
+this sort of database is kind of database you turn to when you know already that you need it. In
+other words, if you're questioning if you need this, then you don't.
+
+.Document databases
+These store data in what essentially look like structs or records from a programming langauge, or a
+JSON object. They map easily to the code one might right for an application since almost every
+language I've seen (except Bash) has some facility to define structs of records.
+
+.Column family databases
+These are large volume, high availabilty databases, like Cassandra, that are used when all your data
+will not fit on a single server which means you probably have several hundred terrabytes of data. In
+the case of an enode, well there will definitely not be more configuration data than the enode can
+handle, so I think we can safely ignore these types of databases.
+
+
+
+=== A note on monitored/read-only data
+
+Monitored data requires fast read/write and has a different set of properties from config
+data. Most noticibly it's not configurable. The user can't change the value of a database entry that
+is used for monitoring some aspect of a system, like the packets per second on a nic. It's not
+persisted either. I'm not sure what to use for monitored data yet. It would be possible to use the
+same db as the configuration database but that's not ideal.
+
 == Hypothetical Use Cases
-To give you an idea of what Xnodes helps with the following use cases are outlined below as a
+To give you an idea of what Enodes helps with the following use cases are outlined below as a
 thought experiment.
 
 .Running a web server
 The typical scenario is an organization running a web server that delivers content to external
-clients. Xnodes will manage changes to the configuration of the server. Transforms to the services
+clients. Enodes will manage changes to the configuration of the server. Transforms to the services
 config are preserved so that a rollback can be performed. Additionally a snapshot of the content
 associated with that instance of the config is taken. This allows a proper rollback of the data.
 It's not sufficient to only record the configuration changes. Dependencies between configuration and
@@ -88,7 +150,7 @@ with version B of httpd and requires the new version of the openssl shared objec
 machine. Anyway the system admin performs the upgrade, installing version B of httpd and version B
 of openssl and updating the httpd.conf file to use the new configuration option. A few days later,
 for some reason, they decided to rollback httpd. Maybe and exploit was discovered in the latest
-version of httpd, something they couldn't test for before upgrading. Xnodes allows them to do this
+version of httpd, something they couldn't test for before upgrading. Enodes allows them to do this
 safely because the configuration data associated with version A of httpd is preserved. This state
 becomes the state that all nodes in the system will tend to. Content can also be snapshot to the
 version of the software installed.
@@ -115,17 +177,17 @@ config to a time where the application was installed.
 
 .In production testing
 Say you want to role out the latest version of Wordpress. You have an Xnode system running but want to
-test this latest version of Wordpress. Xnodes will allow you to 1) select the nodes to isolate 2)
+test this latest version of Wordpress. Enodes will allow you to 1) select the nodes to isolate 2)
 role out the upgrade to Wordpress on isolated nodes. Then you can test the new version of Wordpress
 by configuring your network to redirect a percentage of requests to the isolated set of nodes.
 
 == Configuration data
-The Xnodes database is Riak. It is intended to store system configuration information, like the
-packages installed on the Xnodes system, their configuration. Changes to the configuration are not
+The Enodes database is CouchDB. It is intended to store system configuration information, like the
+packages installed on the Enodes system, their configuration. Changes to the configuration are not
 immediately synchronized. Instead, because of the way Riak works, the state of the system will
-eventually become consistent. By trading consistency this allows Xnodes to provide scalabilty and
+eventually become consistent. By trading consistency this allows Enodes to provide scalabilty and
 availabilty. The following is a quote from the OpenSAF IMM Programmers Guide and describes a design
-Xnodes will avoid:
+Enodes will avoid:
 __________________________________________________________________________________________________
 "During the time when sync is in progress, the IMMSv is not writable.  The IMMNDs will reject any
 request that implies a mutation to the repository with SA_AIS_ERR_TRY_AGAIN. Read requests are of
@@ -135,7 +197,7 @@ ________________________________________________________________________________
 
 == Open Issues
 How are services that require redundancy but every instance of the service can't be in use handled?
-For example how would Xnodes handle a dhcp service?
+For example how would Enodes handle a dhcp service?
 
 == Links
 
