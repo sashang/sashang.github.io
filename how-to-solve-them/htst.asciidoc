@@ -1,0 +1,26 @@
+= How To Solve Them
+Notes about solving algorithmic problems
+:stem:
+
+* Recursive functions can be written non-recursively using a stack
+* Breadth first search uses a queue to maintain the nodes that we want to visit next
+* Arrays are simple hash tables.
+* stem:[2^10 = 1024 ~~] one kilo, stem:[2^20 = 1048576 ~~] one mega,
+  stem:[2^30 = 1073741824 ~~] one giga
+* Searching algos are generally `log(n)`
+* Sorting algos are generally `nlog(n)`
+* Problems you've seen before might come disguised as something else. Don't be fooled by the back story.
+* A stack behaves like a queue with its inputs reversed.
+* Think about the brute force solution 1st. It's often better than to come up with that if you get stuck
+* Ask clarifying questions. Don't assume too much.
+* A good interview means that you've explained things well. A great one means that the interviewer
+  learned something from you.
+* Recursive functions are easier to reason about verbally (i.e. at a higher level). Thinking about
+  mechanically becomes hard. For example an in-order bst print is `print left tree, print this node,
+  print right tree`
+* Some questions will combine data structures. For example a cache is a combination of a list and a
+  hash table.
+* Finding the min/max of a dynamic stream, use a min heap and a max heap.
+* trie or prefix tree is good for word completion type problems.
+* Remember that the midpoint between 2 points in an array, L and H, is stem:[(H+L)/2]. Think of it
+  as the average of 2 points.
