@@ -24,3 +24,5 @@ Notes about solving algorithmic problems
 * trie or prefix tree is good for word completion type problems.
 * Remember that the midpoint between 2 points in an array, L and H, is stem:[(H+L)/2]. Think of it
   as the average of 2 points.
+* Max value of an unsigned 32 bit integer is stem:[2^32 - 1]. Number of elements in those 32 bits is
+  stem:[2^32]
