@@ -26,3 +26,8 @@ Notes about solving algorithmic problems
   as the average of 2 points.
 * Max value of an unsigned 32 bit integer is stem:[2^32 - 1]. Number of elements in those 32 bits is
   stem:[2^32]
+* Dynamic programming solutions are based off their recursive expressions. You create a table or an
+  array to record the values calculated during a previous run of the function. This benefits
+  recursive functions that call themselves more than once more than a function that calls itself
+  once. For example a fibboncci function f(n) = f(n-1) + f(n-2).
+
