@@ -4,6 +4,7 @@ Notes about solving algorithmic problems
 
 * Recursive functions can be written non-recursively using a stack
 * Breadth first search uses a queue to maintain the nodes that we want to visit next
+  - It's good for find the shortest path to a node.
 * Arrays are simple hash tables.
 * stem:[2^10 = 1024 ~~] one kilo, stem:[2^20 = 1048576 ~~] one mega,
   stem:[2^30 = 1073741824 ~~] one giga
@@ -30,4 +31,8 @@ Notes about solving algorithmic problems
   array to record the values calculated during a previous run of the function. This benefits
   recursive functions that call themselves more than once more than a function that calls itself
   once. For example a fibboncci function f(n) = f(n-1) + f(n-2).
-
+* Graphs can be represented as adjacency lists or an adjaceny matrix.
+  - adj list is economical in space. A simple adj list is an array of lists. The index in the array
+    is the node, the list at that index contains the nodes that this node joins to.
+  - DFS on a graph is O(V + E) i.e. the sum of the number of edges and vertices.
+  - BFS is also O(V + E)
