@@ -36,3 +36,7 @@ Notes about solving algorithmic problems
     is the node, the list at that index contains the nodes that this node joins to.
   - DFS on a graph is O(V + E) i.e. the sum of the number of edges and vertices.
   - BFS is also O(V + E)
+* To select the rightmost bit of x: `x&~(x - 1)`. For example let x = 110 then x-1 = 101, then
+  `~(x-1) = 10` so 110 & 010 = 010. Let x = 111011 then x - 1 = 111010, `~(x-1) = 000101` and
+  `x&~(x-1) = 1`. That idea can be used to clear the rightmost bit as well by not using the
+  complement: `x&(x-1)`
