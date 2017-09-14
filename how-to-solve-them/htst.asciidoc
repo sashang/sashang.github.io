@@ -2,6 +2,57 @@
 Notes about solving algorithmic problems
 :stem:
 
+== Data Structures
+
+=== Heaps
+
+Insertion, deletion stem:[O(log n)] 
+
+=== Stacks
+
+
+=== Arrays
+O(1) lookup.
+
+=== Graphs
+
+* BFS is good for shortest path. 
+  - Need a queue to track the nodes to visit.
+  - Tracking the distance can be tricky. Can use a marker. So after adding children of a node, add the
+    mark value. When you pop the mark value inc the depth count. Or use 2 queues a current and next
+    queue. While popping the current queue, add those children to the next queue. In the next
+    iteration swap queues.
+
+* Graphs can be represented as adjacency lists or an adjaceny matrix.
+  - adj list is economical in space. A simple adj list is an array of lists. The index in the array
+    is the node, the list at that index contains the nodes that this node joins to.
+  - DFS on a graph is O(V + E) i.e. the sum of the number of edges and vertices.
+  - BFS is also O(V + E)
+
+
+=== Linked lists
+
+O(n) lookup.
+
+=== Hash tables
+
+O(1) lookup.
+
+=== Binary Search Tree
+
+== Algorithms
+
+=== Dijstra
+
+=== Bellman-Ford
+
+=== A*
+
+=== Binary Search
+
+
+
+
 * Recursive functions can be written non-recursively using a stack
 * Breadth first search uses a queue to maintain the nodes that we want to visit next
   - It's good for find the shortest path to a node.
@@ -31,12 +82,10 @@ Notes about solving algorithmic problems
   array to record the values calculated during a previous run of the function. This benefits
   recursive functions that call themselves more than once more than a function that calls itself
   once. For example a fibboncci function f(n) = f(n-1) + f(n-2).
-* Graphs can be represented as adjacency lists or an adjaceny matrix.
-  - adj list is economical in space. A simple adj list is an array of lists. The index in the array
-    is the node, the list at that index contains the nodes that this node joins to.
-  - DFS on a graph is O(V + E) i.e. the sum of the number of edges and vertices.
-  - BFS is also O(V + E)
 * To select the rightmost bit of x: `x&~(x - 1)`. For example let x = 110 then x-1 = 101, then
   `~(x-1) = 10` so 110 & 010 = 010. Let x = 111011 then x - 1 = 111010, `~(x-1) = 000101` and
   `x&~(x-1) = 1`. That idea can be used to clear the rightmost bit as well by not using the
   complement: `x&(x-1)`
+* Sliding window problems are tricky. Hard to think about how it works efficiently. For example how
+  to use a sliding window to maintain the maximum. Naive way is to use a heap that is the size of
+  the window. But the O(n) way is to use a list that keeps the maximum at the front.
