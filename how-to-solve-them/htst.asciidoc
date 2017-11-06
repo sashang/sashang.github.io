@@ -7,6 +7,19 @@ Notes about solving algorithmic problems
 === Heaps
 
 Insertion, deletion stem:[O(log n)] 
+Lookup: stem:[O(1)]
+
+C++ use a priority_queue. Header is queue.
+min heap has the smallest element on the top and larger elements below, therefore it uses a greater
+function for its comparator.
+
+--------
+    priority_queue<int, vector<int>, function<bool(int,int)>> 
+        min_heap([](int a, int b)->bool{return a > b;});
+--------
+
+max heap has the largest element on the top and smaller elements below therefore use a less function
+for its comparator
 
 === Stacks
 
@@ -42,7 +55,7 @@ O(1) lookup.
 
 == Algorithms
 
-=== Dijstra
+=== Dijkstra
 
 === Bellman-Ford
 
@@ -50,8 +63,7 @@ O(1) lookup.
 
 === Binary Search
 
-
-
+== Coding Notes
 
 * Recursive functions can be written non-recursively using a stack
 * Breadth first search uses a queue to maintain the nodes that we want to visit next
@@ -74,7 +86,7 @@ O(1) lookup.
   hash table.
 * Finding the min/max of a dynamic stream, use a min heap and a max heap.
 * trie or prefix tree is good for word completion type problems.
-* Remember that the midpoint between 2 points in an array, L and H, is stem:[(H+L)/2]. Think of it
+* Remember that the midpoint between 2 points in an array, L and H, is stem:[L + ((H-L)/2)]. Think of it
   as the average of 2 points.
 * Max value of an unsigned 32 bit integer is stem:[2^32 - 1]. Number of elements in those 32 bits is
   stem:[2^32]
@@ -89,3 +101,35 @@ O(1) lookup.
 * Sliding window problems are tricky. Hard to think about how it works efficiently. For example how
   to use a sliding window to maintain the maximum. Naive way is to use a heap that is the size of
   the window. But the O(n) way is to use a list that keeps the maximum at the front.
+
+== System Design Notes
+
+* Remember to clarify the question. Question will be deliberately vague. Clarify inputs, use cases,
+  number of users.
+* Break the problem down into sections until they can be tackled by an appropriate algorithm or map
+  to something tangible, like a database schema.
+* Distributed hashing places the key at the node f(key) = key%n. This doesn't scale
+  horizontally since if I add another node to the system the all keys need to be remapped.
+  Consistent hashing resolves this problem (dynamo uses this technique) to minimize the number of
+  keys that need to be re-distributed. Reduces to k/n. 
+* Caching lets you retrieve recent requests at the request node without putting pressure on the
+  systems downstream. An effective cache will relieve the load on the downstream services. In a
+  multiple node system each node can have a part of the cache locally (distributed caching) or we
+  can have a global cache that all nodes request from. The global cache can be a dedicated machine
+  with high-end hardware so it can serve the multiple requests it gets from the request layer of
+  nodes. Cache invalidation occurs on writes. Can use a few policies 1) write through where the
+  cache and origin are updated at the same time. Increased latency since 2 writes occur before
+  returning. Advantage is we know that the system is consitent. 2) write around where we write to the
+  backend and ignore the cache. This reduces load on the cache but if a subsequent read for that
+  data comes through it means a cache miss and having to read it from the origin. Cache eviction
+  occurs on read. A read request for an item not in the cache will require a read from the origin
+  data store and an update made to the cache, thus evicting some existing key-value. LRU least
+  recently used evicts based on items that were least recently used. LFU least frequently used keeps
+  a count that 
+* CAP (consitency, availability, partition tolerence). Consistency means at all times is the view of
+  the data the same. Availability means all requests return some data. Partition tolerance means if
+  my cluster is split I can still serve read/write requests. Can have 2 out of 3. 
+  - Imagine a 2 node system. Link between 2 nodes breaks. You have 2 options 1) forgo consistency
+    and allow requests to both nodes. 2) Forgo availability and make one node responsible for all
+    read/write requests.
+
