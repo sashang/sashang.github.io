@@ -51,6 +51,14 @@ O(n) lookup.
 
 O(1) lookup.
 
+unorded_map is C++ hash table map is implement via a rb-tree.
+Basic hash table implemented via an array and a hash function.
+Basic hash function is mod. 
+Good for keeping counts of unique items
+CHaining where a collision is handled by appending to the end of the bucket
+Open addressing where the new value is written to the next available slot.
+
+
 === Binary Search Tree
 
 == Algorithms
@@ -60,6 +68,47 @@ O(1) lookup.
 === Bellman-Ford
 
 === A*
+
+=== Kadane's Algorithm
+
+This simple looking piece of code is really brilliant. The reasoning behind it is amazing and
+a demonstration of inductive reasoning and the ability to ask the right question. The
+problem it solves is 'find the maximum sum subarray in an array'. What this means is that we want
+the maximum sum (not the subarray) given by this subarray. So for example given an array
+
+---------
+[-1,-2,5]
+---------
+
+Then the answer is 5.
+
+Your function signature will look something like this:
+
+-----------------
+int max_sum_subarray(int* arr)
+-----------------
+
+A naive approach calculates all the sums for all subarrays and tracks the maximum. This is
+stem:[O(n^3)]. Now from the initial framing of the question you might think that knowing the
+subarray is important. Surely you need to know each subarray to calculate it? However this isn't the
+case. Kadane's genius was to realize that what the subarray is, isn't important. All that matters is
+that there is a maximum. Additionally every solution will always have a last element. So assume that
+we know the maximum at stem:[A\[i\]]. Call it stem:[B_i]. Then the solution at the next i,
+stem:[B_(i+1)] is stem:[max(B_i + A\[i+1\], B_i)]. This leads to the following algorithm:
+
+------------
+int max_so_far = 0
+int max_now = 0;
+
+max_now = max_so_far  = arr[0];
+for (int i = 1; i < arr.size(); ++i)
+{
+  max_now = max(max_so_far + arr[i], arr[i]);
+  max_so_far = max(max_so_far, max_now);
+}
+
+------------
+
 
 === Binary Search
 
