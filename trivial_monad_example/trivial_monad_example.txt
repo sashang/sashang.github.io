@@ -22,18 +22,18 @@ function H on input etc....' This scenario can lead to a sequence of nested 'if
 
 [source,caml]
 --------------------------------------------------------------------------------
-let mul_3 x = 
+let mul_3 x =
   printfn "3x"
   Some (x * 3)
 
-let mul_4 x = 
+let mul_4 x =
   printfn "4x"
   Some (x * 4)
 
 let foo () =
   match (Some 2) with
   | None -> None
-  | Some thing -> 
+  | Some thing ->
       match (mul_3 thing) with
       | None -> None
       | Some thing ->
@@ -78,3 +78,16 @@ let bar () =
   bind (bind (Some 2) mul_3) (fun x -> mul_4 x)
 --------------------------------------------------------------------------------
 
+== Update April 2018
+
+Looks like the F# community have refined this idea and called it 'Railway Oriented
+Programming'.
+
+https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/results
+
+Here's a better more detailed explanation than mine above:
+https://swlaschin.gitbooks.io/fsharpforfunandprofit/content/posts/recipe-part2.html
+
+To be honest I wouldn't be surprised if other programmers were doing something
+similar within their code, as I was 7 years ago. It's nice that MS have formally
+added it to F# now.

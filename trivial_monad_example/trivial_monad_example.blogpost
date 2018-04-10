@@ -12,7 +12,7 @@ Rp4
 (dp5
 S'status'
 p6
-S'unpublished'
+S'published'
 p7
 sS'title'
 p8
@@ -24,7 +24,7 @@ S'http://www.zenskg.net/wordpress/?p=187'
 p11
 sS'checksum'
 p12
-S'c53e5ef1ec0edb6def6994bff8308ee0'
+S'cc6e795466977ac17a02134fd16989c7'
 p13
 sS'created_at'
 p14
@@ -35,7 +35,7 @@ S'article'
 p16
 sS'updated_at'
 p17
-I1305461131
+I1523362613
 sS'post_type'
 p18
 S'post'
@@ -49,8 +49,6 @@ I187
 sS'categories'
 p23
 (lp24
-S'programming'
+S'Uncategorized'
 p25
-aS'f#'
-p26
 asb.
