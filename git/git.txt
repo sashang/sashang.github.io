@@ -162,7 +162,7 @@ Update>> 1-7
 * 5:    unchanged       +14/-6 lib/Sema/SemaStmt.cpp
 * 6:    unchanged        +8/-2 lib/Serialization/ASTReaderStmt.cpp
 * 7:    unchanged        +3/-3 lib/Serialization/ASTWriterStmt.cpp
-Update>> 
+Update>>
 updated 7 paths
 
 *** Commands ***
@@ -225,4 +225,59 @@ git filter-branch -f --tree-filter \
 The `tree-filter` option takes a shell command and executes it from the root of the repository. The
 option `--tag-name-filter` renames the tags. In this case `cat` is the command so the tag name
 remains the same as the original.
+
+.Branching
+
+Branches give you the ability to work on a change in a parallel stream without affecting the master
+branch. Confusingly you use `git checkout -b <branch name>` to create a branch (confusingly you can
+also use `git checkout` to reset a file to its state at HEAD).
+
+--------
+master > git checkout -b test-branch-2
+test-branch-2 > git branch -avv
+master                     b392b5c [origin/master] Add function that reads config from an xml file. Add example settings.xml file.
+* test-branch-2              b392b5c Add function that reads config from an xml file. Add example settings.xml file.
+remotes/origin/HEAD        -> origin/master
+remotes/origin/master      b392b5c Add function that reads config from an xml file. Add example settings.xml file.
+remotes/origin/test-branch 84459ad Just testing github workflow.
+--------
+
+Now say you want this local branch to be created at the upstream. Then use `git push
+--set-upstream`.
+
+-------
+test-branch-2 > git push --set-upstream origin test-branch-2
+Total 0 (delta 0), reused 0 (delta 0)
+
+To github.com:sashang/giraffe-sample.git
+ * [new branch]      test-branch-2 -> test-branch-2
+Branch 'test-branch-2' set up to track remote branch 'test-branch-2' from 'origin'.
+-------
+
+Now say you want to delete the local branch:
+
+------
+test-branch-2 > git branch -D test-branch-2
+error: Cannot delete branch 'test-branch-2' checked out at
+------
+
+Oops. We have to switch out of the branch first.
+
+------
+test-branch-2 1 > git checkout master
+Switched to branch 'master'
+Your branch is up to date with 'origin/master'.
+master > git branch -D test-branch-2
+Deleted branch test-branch-2 (was b392b5c).
+master >
+------
+
+Then say we come back after a few months and we want to checkout that branch from the remote
+location:
+
+------
+master > git checkout -b tb2 origin/test-branch-2
+Branch 'tb2' set up to track remote branch 'test-branch-2' from 'origin'.
+Switched to a new branch 'tb2'
+------
 
