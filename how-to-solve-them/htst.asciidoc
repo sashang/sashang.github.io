@@ -21,7 +21,10 @@ function for its comparator.
 max heap has the largest element on the top and smaller elements below therefore use a less function
 for its comparator
 
-=== Stacks
+=== Stacks and Queues
+
+* A stack behaves like a queue with its inputs reversed.
+* Finding the min/max of a dynamic stream, use a min heap and a max heap.
 
 
 === Arrays
@@ -47,6 +50,10 @@ O(1) lookup.
 
 O(n) lookup.
 
+=== Trees, graphs, tries
+
+* trie or prefix tree is good for word completion type problems.
+
 === Hash tables
 
 O(1) lookup.
@@ -57,7 +64,6 @@ Basic hash function is mod.
 Good for keeping counts of unique items
 CHaining where a collision is handled by appending to the end of the bucket
 Open addressing where the new value is written to the next available slot.
-
 
 === Binary Search Tree
 
@@ -109,44 +115,56 @@ for (int i = 1; i < arr.size(); ++i)
 
 ------------
 
-
 === Binary Search
 
-== Coding Notes
+== Patterns behind the problem
+
+=== Dynamic programming
+
+* Problems often involve choice. If the problem requires you to make a choice then the solution probably involves dynamic programming.
+* Solutions are based off their recursive expressions. You create a table or an
+  array to record the values calculated during a previous run of the function. This benefits
+  recursive functions that call themselves more than once. For example a fibboncci function f(n) = f(n-1) + f(n-2) calls itself more  than once.
+* Come up with the recursive formulation, then memoize it afterwards.
+  
+=== Divide and Conquer
+
+* Cut the problem in half and solve each half. Example is quicksort or mergesort.
+
+=== Recursion
 
 * Recursive functions can be written non-recursively using a stack
-* Breadth first search uses a queue to maintain the nodes that we want to visit next
-  - It's good for find the shortest path to a node.
-* Arrays are simple hash tables.
-* stem:[2^10 = 1024 ~~] one kilo, stem:[2^20 = 1048576 ~~] one mega,
-  stem:[2^30 = 1073741824 ~~] one giga
-* Searching algos are generally `log(n)`
-* Sorting algos are generally `nlog(n)`
-* Problems you've seen before might come disguised as something else. Don't be fooled by the back story.
-* A stack behaves like a queue with its inputs reversed.
-* Think about the brute force solution 1st. It's often better than to come up with that if you get stuck
-* Ask clarifying questions. Don't assume too much.
-* A good interview means that you've explained things well. A great one means that the interviewer
-  learned something from you.
 * Recursive functions are easier to reason about verbally (i.e. at a higher level). Thinking about
   mechanically becomes hard. For example an in-order bst print is `print left tree, print this node,
   print right tree`
-* Some questions will combine data structures. For example a cache is a combination of a list and a
-  hash table.
-* Finding the min/max of a dynamic stream, use a min heap and a max heap.
-* trie or prefix tree is good for word completion type problems.
+
+=== Search and sort
+* Breadth first search uses a queue to maintain the nodes that we want to visit next
+  - It's good for find the shortest path to a node.
+* Arrays are simple hash tables.
+* Searching algos are generally `log(n)`
+* Sorting algos are generally `nlog(n)`
+
+=== Numbers
+* stem:[2^10 = 1024 ~~] one kilo, stem:[2^20 = 1048576 ~~] one mega,
+  stem:[2^30 = 1073741824 ~~] one giga
 * Remember that the midpoint between 2 points in an array, L and H, is stem:[L + ((H-L)/2)]. Think of it
   as the average of 2 points.
 * Max value of an unsigned 32 bit integer is stem:[2^32 - 1]. Number of elements in those 32 bits is
   stem:[2^32]
-* Dynamic programming solutions are based off their recursive expressions. You create a table or an
-  array to record the values calculated during a previous run of the function. This benefits
-  recursive functions that call themselves more than once more than a function that calls itself
-  once. For example a fibboncci function f(n) = f(n-1) + f(n-2).
 * To select the rightmost bit of x: `x&~(x - 1)`. For example let x = 110 then x-1 = 101, then
   `~(x-1) = 10` so 110 & 010 = 010. Let x = 111011 then x - 1 = 111010, `~(x-1) = 000101` and
   `x&~(x-1) = 1`. That idea can be used to clear the rightmost bit as well by not using the
   complement: `x&(x-1)`
+  
+== General notes
+* Problems you've seen before might come disguised as something else. Don't be fooled by the back story.
+* Think about the brute force solution 1st. It's often better than to come up with that if you get stuck
+* Ask clarifying questions. Don't assume too much.
+* A good interview means that you've explained things well. A great one means that the interviewer
+  learned something from you.
+* Some questions will combine data structures. For example a cache is a combination of a list and a
+  hash table.
 * Sliding window problems are tricky. Hard to think about how it works efficiently. For example how
   to use a sliding window to maintain the maximum. Naive way is to use a heap that is the size of
   the window. But the O(n) way is to use a list that keeps the maximum at the front.
@@ -181,4 +199,23 @@ for (int i = 1; i < arr.size(); ++i)
   - Imagine a 2 node system. Link between 2 nodes breaks. You have 2 options 1) forgo consistency
     and allow requests to both nodes. 2) Forgo availability and make one node responsible for all
     read/write requests.
+
+== Problems encountered
+
+=== Write a memory allocator
+
+Write a function to track memory allocated. Assume that you have a very large chunk of memory. Write a function that allocates a portion of this chunk. This function can be used more than once, so somehow it needs to record which parts of the larger block are in use, so that the next time it's called the pointer to the block does not overlap with another section that is in use.
+
+----
+void* allocate(uint32_t size)
+----
+
+=== Decode ways
+
+A message containing letters from A-Z is being encoded to numbers using the following mapping: 'A' -> 1,'B' -> 2 ...'Z' -> 26
+Given a non-empty string containing only digits, determine the total number of ways to decode it.
+
+* Came up with a recursive solution. Basically the number of ways (N_n) to get to then end of the string (S_n) is the number of ways to get to the previous S_n-1 + the number of ways to get to S_n-2 (only if those letters n-2 + 1 and n-2+2 are in the alphabet). 
+* Had trouble getting the memoization right. I cached the string as it decreased between recursive function calls BUT you don't need to memoize the string. You can just memoize the length and map that to the number of ways to get to that length. For example, given "12" then memo[0] = 1, memo[1] = 2.
+
 
