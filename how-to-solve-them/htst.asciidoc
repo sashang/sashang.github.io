@@ -6,7 +6,7 @@ Notes about solving algorithmic problems
 
 === Heaps
 
-Insertion, deletion stem:[O(log n)] 
+Insertion, deletion stem:[O(log n)]
 Lookup: stem:[O(1)]
 
 C++ use a priority_queue. Header is queue.
@@ -14,7 +14,7 @@ min heap has the smallest element on the top and larger elements below, therefor
 function for its comparator.
 
 --------
-    priority_queue<int, vector<int>, function<bool(int,int)>> 
+    priority_queue<int, vector<int>, function<bool(int,int)>>
         min_heap([](int a, int b)->bool{return a > b;});
 --------
 
@@ -32,7 +32,7 @@ O(1) lookup.
 
 === Graphs
 
-* BFS is good for shortest path. 
+* BFS is good for shortest path.
   - Need a queue to track the nodes to visit.
   - Tracking the distance can be tricky. Can use a marker. So after adding children of a node, add the
     mark value. When you pop the mark value inc the depth count. Or use 2 queues a current and next
@@ -60,7 +60,7 @@ O(1) lookup.
 
 unorded_map is C++ hash table map is implement via a rb-tree.
 Basic hash table implemented via an array and a hash function.
-Basic hash function is mod. 
+Basic hash function is mod.
 Good for keeping counts of unique items
 CHaining where a collision is handled by appending to the end of the bucket
 Open addressing where the new value is written to the next available slot.
@@ -121,12 +121,14 @@ for (int i = 1; i < arr.size(); ++i)
 
 === Dynamic programming
 
-* Problems often involve choice. If the problem requires you to make a choice then the solution probably involves dynamic programming.
-* Solutions are based off their recursive expressions. You create a table or an
-  array to record the values calculated during a previous run of the function. This benefits
-  recursive functions that call themselves more than once. For example a fibboncci function f(n) = f(n-1) + f(n-2) calls itself more  than once.
+* Problems often involve choice. If the problem requires you to make a choice then the solution
+  probably involves dynamic programming.
+* Solutions are based off their recursive expressions. You create a table or an array to record the
+  values calculated during a previous run of the function. This benefits recursive functions that
+  call themselves more than once. For example a fibboncci function f(n) = f(n-1) + f(n-2) calls
+  itself more  than once.
 * Come up with the recursive formulation, then memoize it afterwards.
-  
+
 === Divide and Conquer
 
 * Cut the problem in half and solve each half. Example is quicksort or mergesort.
@@ -156,7 +158,7 @@ for (int i = 1; i < arr.size(); ++i)
   `~(x-1) = 10` so 110 & 010 = 010. Let x = 111011 then x - 1 = 111010, `~(x-1) = 000101` and
   `x&~(x-1) = 1`. That idea can be used to clear the rightmost bit as well by not using the
   complement: `x&(x-1)`
-  
+
 == General notes
 * Problems you've seen before might come disguised as something else. Don't be fooled by the back story.
 * Think about the brute force solution 1st. It's often better than to come up with that if you get stuck
@@ -178,7 +180,7 @@ for (int i = 1; i < arr.size(); ++i)
 * Distributed hashing places the key at the node f(key) = key%n. This doesn't scale
   horizontally since if I add another node to the system the all keys need to be remapped.
   Consistent hashing resolves this problem (dynamo uses this technique) to minimize the number of
-  keys that need to be re-distributed. Reduces to k/n. 
+  keys that need to be re-distributed. Reduces to k/n.
 * Caching lets you retrieve recent requests at the request node without putting pressure on the
   systems downstream. An effective cache will relieve the load on the downstream services. In a
   multiple node system each node can have a part of the cache locally (distributed caching) or we
@@ -192,10 +194,10 @@ for (int i = 1; i < arr.size(); ++i)
   occurs on read. A read request for an item not in the cache will require a read from the origin
   data store and an update made to the cache, thus evicting some existing key-value. LRU least
   recently used evicts based on items that were least recently used. LFU least frequently used keeps
-  a count that 
+  a count that
 * CAP (consitency, availability, partition tolerence). Consistency means at all times is the view of
   the data the same. Availability means all requests return some data. Partition tolerance means if
-  my cluster is split I can still serve read/write requests. Can have 2 out of 3. 
+  my cluster is split I can still serve read/write requests. Can have 2 out of 3.
   - Imagine a 2 node system. Link between 2 nodes breaks. You have 2 options 1) forgo consistency
     and allow requests to both nodes. 2) Forgo availability and make one node responsible for all
     read/write requests.
@@ -204,7 +206,10 @@ for (int i = 1; i < arr.size(); ++i)
 
 === Write a memory allocator
 
-Write a function to track memory allocated. Assume that you have a very large chunk of memory. Write a function that allocates a portion of this chunk. This function can be used more than once, so somehow it needs to record which parts of the larger block are in use, so that the next time it's called the pointer to the block does not overlap with another section that is in use.
+Write a function to track memory allocated. Assume that you have a very large chunk of memory. Write
+a function that allocates a portion of this chunk. This function can be used more than once, so
+somehow it needs to record which parts of the larger block are in use, so that the next time it's
+called the pointer to the block does not overlap with another section that is in use.
 
 ----
 void* allocate(uint32_t size)
@@ -215,7 +220,12 @@ void* allocate(uint32_t size)
 A message containing letters from A-Z is being encoded to numbers using the following mapping: 'A' -> 1,'B' -> 2 ...'Z' -> 26
 Given a non-empty string containing only digits, determine the total number of ways to decode it.
 
-* Came up with a recursive solution. Basically the number of ways (N_n) to get to then end of the string (S_n) is the number of ways to get to the previous S_n-1 + the number of ways to get to S_n-2 (only if those letters n-2 + 1 and n-2+2 are in the alphabet). 
-* Had trouble getting the memoization right. I cached the string as it decreased between recursive function calls BUT you don't need to memoize the string. You can just memoize the length and map that to the number of ways to get to that length. For example, given "12" then memo[0] = 1, memo[1] = 2.
+* Came up with a recursive solution. Basically the number of ways (N_n) to get to then end of the
+  string (S_n) is the number of ways to get to the previous S_n-1 + the number of ways to get to
+  S_n-2 (only if those letters n-2 + 1 and n-2+2 are in the alphabet).
+* Had trouble getting the memoization right. I cached the string as it decreased between recursive
+  function calls BUT you don't need to memoize the string. You can just memoize the length and map
+  that to the number of ways to get to that length. For example, given "12" then memo[0] = 1,
+  memo[1] = 2.
 
 
