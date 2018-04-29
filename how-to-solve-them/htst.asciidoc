@@ -128,6 +128,7 @@ for (int i = 1; i < arr.size(); ++i)
   call themselves more than once. For example a fibboncci function f(n) = f(n-1) + f(n-2) calls
   itself more  than once.
 * Come up with the recursive formulation, then memoize it afterwards.
+* Bottom up approach (see knapsack problem or counting steps.)
 
 === Divide and Conquer
 
@@ -229,4 +230,25 @@ number of ways to decode it.
   that to the number of ways to get to that length. For example, given "12" then memo[0] = 1,
   memo[1] = 2.
 
+=== Cake thief (unbound knapsack).
+
+A thief wants to steal cakes. Each cake has a weight and a value, (3,20). What's the maximum value I
+can fit in a kanpsack of capacity n. The thief can steal as many of the cakes of that type, so for
+example, say there is only one *type* cake [(3,20)] and his knapsak has capacity 6, then he can
+steal 2 of them for a total value of 40.
+
+* Dynamic programming. Use a bottom up approach. What's the max value that can fit in a knapsack of
+  capacity 1? What's the max that can fit in a knapsack of capacity 2? That's the currrent cake's
+  value + max value at capacity of knapsack weight - current cake's weight.
+
+=== Count ways
+
+A child is climbing steps and can only take one or two steps at a time. Given the number of steps,
+n, count the number of ways to get to the top.
+
+* Note that we need to count the number of ways not the number of steps.
+* Use a top down or bottom up approach.
+* bottom up: use an array, set a[0] = 0 or 1 (depends on initial conditions, problem statement
+  etc..., what interviewer says), a[1] = 1 , then a[i] = a[i-2] + a[i-1]. It can be tempting to add 1
+  (i.e a[i] = a[i-2] + a[i-1] + 1) but that's wrong.
 
