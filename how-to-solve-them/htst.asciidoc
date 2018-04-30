@@ -252,3 +252,14 @@ n, count the number of ways to get to the top.
   etc..., what interviewer says), a[1] = 1 , then a[i] = a[i-2] + a[i-1]. It can be tempting to add 1
   (i.e a[i] = a[i-2] + a[i-1] + 1) but that's wrong.
 
+
+=== Signals within 5 seconds
+
+You're given an array of numbers. The numbers represent seconds since an arbitrary start time. For
+example I = [1,2,4,5]. They're always ascending (i..e you can't go back in time). Every time you
+count 3 numbers within 5 seconds you need to raise a flag. How many times will this flag be raised?
+
+* Use a queue with a max of 3 items. Each time you read from the stream increment calc the time
+  difference between the latest and last time. If it's equal to or less than 5 then a flag is
+  raised.
+
