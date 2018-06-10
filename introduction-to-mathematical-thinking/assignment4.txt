@@ -100,7 +100,8 @@ Fred will go and he will play.
 The number x is neither negative nor greater than 10.
 
 (f) We will win the first game or the second.
-We will not win the first game nor the second.
+We will not win the first game nor the second. (Same as 'we will not win the first game and not the
+second' in colloqial English)
 
 
 
