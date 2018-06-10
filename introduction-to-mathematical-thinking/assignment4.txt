@@ -88,7 +88,7 @@ natural sounding) denial of each of the following statements.
 34,159 is not a prime number
 
 (b) Roses are red and violets are blue.
-Rose are not red or violets are not blue.
+Rose are not red or violets are not blue. (Maybe 'Roses are neither red nor blue'?)
 
 (c) If there are no hamburgers, I’ll have a hot dog.
 If there are no hamburgers, I won't have a hot dog.
