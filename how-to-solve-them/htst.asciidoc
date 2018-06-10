@@ -174,6 +174,43 @@ for (int i = 1; i < arr.size(); ++i)
 
 == System Design Notes
 
+=== Topics to address
+
+==== Scalability
+
+Typically these questions require you to design for scalability. Consider this problem: How to
+design a load balancer. A load balancer is flooded consistently with traffic and has to route the
+packet to another device/service/backplane that handles that traffic. Using a hash of the ip src and
+dst address modulo the number of devices.
+
+==== Use cases
+
+At the start outline the use cases. For example given the question "Design a url shortening service
+like bit.ly"
+
+.Core use cases
+* Go from the long => to the short url (ex: www.wikipedia.com/../../.. => bitly.com/1932)
+* Reverse lookup given a short url => map to the long url.
+
+.Nice to have
+* Custom urls
+* analytics (how many clicks on the short url)
+* automatic link expiration or manual
+* Should we expose an API for programmers to use?
+* High availability
+
+==== Constraints
+
+How much data should the system work with? How much traffic (requests per month/second)?
+
+For example in the url shortening problem 1st question is how many url shortening requests per month
+do we expect? How many url lookup requests per month.
+
+
+
+==== Estimation
+
+Do some back of the envelope calculation.
 * Remember to clarify the question. Question will be deliberately vague. Clarify inputs, use cases,
   number of users.
 * Break the problem down into sections until they can be tackled by an appropriate algorithm or map
