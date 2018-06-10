@@ -1,3 +1,4 @@
+vim: syntax=asciidoc tw=100
 = Assignment 4
 :stem:
 
@@ -102,6 +103,5 @@ The number x is neither negative nor greater than 10.
 (f) We will win the first game or the second.
 We will not win the first game nor the second. (Same as 'we will not win the first game and not the
 second' in colloqial English)
-
 
 
