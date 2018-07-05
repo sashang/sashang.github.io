@@ -1,0 +1,39 @@
+// vim: syntax=asciidoc tw=100
+= Assignment 7
+:stem:
+
+== 4
+
+_Explain why proving φ ⇒ ψ and ψ ⇒ φ establishes the truth of φ ⇔ ψ._
+
+Because stem:[(psi => phi) ^ (phi => psi)] is the definition of stem:[(psi <=> phi)].
+
+== 6
+
+_6. Prove that if five investors split a payout of $2M, at least one investor receives at least
+$400,000._
+
+Assume not one investor received $400000 or more. In other words all investors received less than
+$400000.
+
+stem:[(AA x in I)[recv(x) < 400000]]
+
+Then the sum of all received money must be less than 2M. But this can't be true since the initial
+sum was $2M and we can't split that and then sum it and have less than $2M. Therefore the initial
+assumption must be false.
+
+== 10
+
+_Prove or disprove the statement "An integer n is divisible by 12 if and only if stem:[n^3] is divisible by
+12."_
+
+If we want to prove it we need to show:
+
+stem:[(12|n => 12|n^3) ^^ (12|n^3 => 12|n)]
+
+To disprove we need to show one of the above conditionals is false.
+
+Let n = 6, then the condition stem:[12|n^3 => 12|n] is false because 12 divides 216 but 12 does not
+divide into 6.
+
+
