@@ -1,4 +1,4 @@
-//vim: syntax=asciidoc tw=100
+// vim: syntax=asciidoc tw=100
 = Assignment 1
 
 == 1
