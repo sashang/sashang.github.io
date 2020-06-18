@@ -1,0 +1,27 @@
+= MK11 Character Strategy
+
+Notes about common strategies players employ online.
+
+== Scorpion
+=== Far
+==== Teleport
+
+==== Spear
+
+=== Mid
+temp
+
+=== Close
+temp
+
+== Sub-Zero
+=== Far
+temp
+
+=== Mid
+temp
+
+=== Close
+temp
+
+
