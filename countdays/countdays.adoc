@@ -1,6 +1,9 @@
-Making the Compiler do the Work
-================================
+
+= Making the Compiler do the Work
 Sashan Govender
+:revdate: 2019-03-30 15:26:00 +1100
+:page-tags: [cpp, templates]
+:showtitle:
 
 This was a program I wrote a while ago (2003) to demonstrate what can be done
 with template metaprogramming in `C++`. It's based on Todd Veldhuilzen's article
