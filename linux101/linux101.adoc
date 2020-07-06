@@ -144,7 +144,7 @@ written for one won't work on the other and because the languages are quite diff
 to make a non-trivial script portable are doomed to fail. It makes more sense, if presented with a
 script in csh for example, to run it in the csh command line interpreter. The Bourne Shell
 scripting language became the POSIX standard and of all the interpreters that can run Bourne Shell
-scripts, Bash became the most popular. As a result, Bash is everywhere Linux is. 
+scripts, Bash became the most popular. As a result, Bash is everywhere Linux is.
 
 ==== X Windows
 This is the basis of all graphical user interfaces. KDE and GNOME are both desktop managers that lie
@@ -152,7 +152,7 @@ with X Windows through them. Server distributions will not package X Windows sin
 for a GUI on a server that runs without a monitor. Machines without a monitor are sometimes called
 headless and you interact with them via the shell over the network using ssh. Some servers will
 install the server side components of X Windows to allow users to remotely connect and have a GUI to
-work with. 
+work with.
 
 ==== Text Editors
 A text editor on Linux is a system administrator's or developer's best friend. You will spend most
@@ -210,7 +210,7 @@ my home directory.
 ---------------
 bash-4.3$ ls
 bin  code  Desktop  Downloads  tmp
-bash-4.3$ 
+bash-4.3$
 ---------------
 
 To see the name of the current directory type `pwd`.
@@ -218,7 +218,7 @@ To see the name of the current directory type `pwd`.
 ---------------
 bash-4.3$ pwd
 /home/sashan
-bash-4.3$ 
+bash-4.3$
 ---------------
 
 * Note that on Linux individual directories in a path name are separated by a forward slash `/`.
@@ -228,15 +228,15 @@ Type `ls -a`.
 ---------------
 
 sashan@arch-vm: ~  $ ls -a
-.              .cabal        Downloads     
-..             .cache        .esd_auth     
-.adobe         code          .gem          
-.bash_history  .config       .ghc          
-.bash_logout   .dbus         .gitconfig    
-.bash_profile  Desktop       .gresolverrc  
-.bashrc        .dmenu_cache  .gvimrc       
-bin            Documents     .hgrc         
-sashan@arch-vm: ~  $ 
+.              .cabal        Downloads
+..             .cache        .esd_auth
+.adobe         code          .gem
+.bash_history  .config       .ghc
+.bash_logout   .dbus         .gitconfig
+.bash_profile  Desktop       .gresolverrc
+.bashrc        .dmenu_cache  .gvimrc
+bin            Documents     .hgrc
+sashan@arch-vm: ~  $
 ---------------
 
 This shows hidden files. Hidden files are prefixed with a `.`. Typically application
@@ -259,7 +259,7 @@ drwxr-xr-x 11 sashan users      4096 May 20 22:41 Downloads
 -rw-r--r--  1 sashan users 209590557 Mar 10 23:35 suse12.tar.bz
 drwxr-xr-x  3 sashan users      4096 Mar 24 11:39 tmp
 drwxr-xr-x  3 sashan users      4096 Dec  9 21:06 writing
-sashan@arch-vm: ~  $ 
+sashan@arch-vm: ~  $
 ---------------
 
 This is the most useful way to find out about the files in a directory. The 1st column are the file
@@ -337,7 +337,7 @@ cd $HOME
 
 Alternatively the `~` can be used in place of `$HOME`.
 
-To set an environment variable: 
+To set an environment variable:
 
 ----------------
 $ myvar=asda
@@ -477,7 +477,7 @@ fi
 
 Now the interpreter things that `[$myvar` is a command  to execute with the parameters `-eq` and
 `1]`. This also explains why when defining a variable you do not place a space between the variable
-name and the `=`. 
+name and the `=`.
 
 -----------
 $ myvar = 1
@@ -586,7 +586,7 @@ fi
 
 Now it's clear that the command `test` is being executed with the single argument `0`. How can we
 find out what test does with its arguemnts? Remember the man pages mentioned above? Now is a good
-time to use it. In the shell type 
+time to use it. In the shell type
 
 -----------
 $ whatis test
@@ -609,7 +609,7 @@ document is:
 ----------------
 
 Therefore, with a single argument, `test` will always return `0` which in shell programming is true,
-which is why expressions like 
+which is why expressions like
 
 ----------
 if [ 0 ]
@@ -700,7 +700,7 @@ join 2 command lists with a logical and. The interpreter will perform short circ
 example the following is an idiom you might see used from time to time in shell scripts.
 
 ------------
-somecommand || exit 1 
+somecommand || exit 1
 ------------
 
 If `somecommand` fails then the call to `exit 1` is made and the script will terminate with a return
@@ -830,10 +830,10 @@ It prints the line containing the match.
 === Basic Expressions
 
 A simple expression is one that contains no special characters and matches literally. For
-example, 
+example,
 
 ------------------------------
-$ grep "is" summertime-ending.txt 
+$ grep "is" summertime-ending.txt
 “It used to be that he, John, had too little employment. Now that is about to change. Now he will
 have as much employment as he can handle, as much and more. He is going to have to abandon some of
 his personal projects and be a nurse. Alternatively, if he will not be a nurse, he must announce to
@@ -853,7 +853,7 @@ the word is part of another larger word.  Unfortunately the POSIX specification 
 expressions doesn't define a metacharacter that represents word boundaries. To do this use `grep
 -w`.
 -------------------------------
-$ grep -w "is" summertime-ending.txt 
+$ grep -w "is" summertime-ending.txt
 “It used to be that he, John, had too little employment. Now that is about to change. Now he will
 have as much employment as he can handle, as much and more. He is going to have to abandon some of
 you. Goodbye. One or the other: there is no third way.”
@@ -862,7 +862,7 @@ you. Goodbye. One or the other: there is no third way.”
 One can also use the special characters `\<` and  `\>` that mark the start and end of a word.
 
 -------------------------------
-$ grep "\<is\>" summertime-ending.txt 
+$ grep "\<is\>" summertime-ending.txt
 “It used to be that he, John, had too little employment. Now that is about to change. Now he will
 have as much employment as he can handle, as much and more. He is going to have to abandon some of
 you. Goodbye. One or the other: there is no third way.”
@@ -892,7 +892,7 @@ it is at the start of a line.
 
 The Dollar `$`::
 
-The dollar matches the end of a line. 
+The dollar matches the end of a line.
 
 Parentheses `\(` and `\)`::
 
@@ -927,7 +927,7 @@ This matches 1 or more of the preceding expression.
 
 Bar or Vertical Line or Pipe `|`::
 A regular expression that consists of two expressions separated by this symbol matches a string that
-contains one of the expressions. 
+contains one of the expressions.
 
 Confusingly if using extended regular expressions you don't need to escape the `{` or the `(`. For
 example this ERE `(ab)` is equivalent to this BRE `\(ab\)`. In other words the parentheses have
@@ -1023,7 +1023,7 @@ will not match this:
 foo (some_char, some_int);
 --------------
 
-because of the space between the `foo` and `(`. There are a few ways to remedy this: 
+because of the space between the `foo` and `(`. There are a few ways to remedy this:
 
 - you could rewrite the expression to handle whitespace or
 - strip the whitespace then process the functions.
