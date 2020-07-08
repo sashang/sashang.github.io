@@ -1,0 +1,227 @@
+= Bash: From Zero to 100
+Sashan Govender (c) 2020
+:toc:
+:sectnum:
+:description: Quick start guide to Bash
+:keywords: bash, shell, programming, code, script
+:source-highlighter: pygments
+
+== Introduction
+
+The problem with Bash is that its syntax is quirky and easy to forget.
+This guide gathers commonly used patterns in one place.
+It should be useful for engineers in software development, system administration or devops.
+
+To begin you'll need:
+
+- a Unix based operating system like a Mac or Linux machine
+- a text editor
+
+Some notes:
+
+- I don't differentiate between shell and Bash. This is to keep this document simple. It adds a lot
+  of extra work to differentiate POSIX compliant shell from Bash and for most people it's not
+  relevant.
+
+=== Hello World
+
+Start the terminal program.
+
+At the command prompt type:
+
+.Input
+-------------------
+$ echo "hello world"
+-------------------
+
+.Output
+------------------
+hello world
+------------------
+
+== A Starting Point
+
+I like my shell scripts to start with a main function.
+
+[source,bash]
+----
+include::main.sh[]
+----
+
+You can copy and paste the text above into a file.
+To run it you'll need to enable execute permissions on the file using `chmod`.
+
+----
+chmod +x main.sh
+./main.sh
+----
+
+File permissions are explained later.
+Remember, to run the script prefix the file with `./`.
+`.` points to the current directory.
+Unlike Windows the current directory is not in the `PATH` environment variable which is why we
+explicitly tell the shell the path to the binary to execute.
+
+=== Command Line Arguments
+
+All arguments to the script can be captured using `$@`. If you know which argument you want you can
+use the positional arguments to get them.
+
+[source,bash]
+----
+include::main1.sh[]
+----
+<1> `1` and `2` are positional arguments.
+<2> `@` you can think of as a an array of all the positional parameters.
+
+== Parameters
+
+Parameters are Bash's variables.
+Bash is untyped so you can think of them as strings.
+
+.Setting a parameter
+[source,bash]
+----
+VAR="some val"
+----
+
+WARNING: Spacing after a variable name matters. There can't be a space between the variable name and the value.
+[source,bash]
+----
+VAR = "some val" #<1>
+----
+<1> Spaces after a paramter name are bad.
+
+If you try and run this you'll see and error like:
+
+`VAR: command not found`
+
+Why? Because whenever Bash sees a space it thinks that the text preceding is the start of a command,
+and tries to run it, but `VAR` is not a binary in the `PATH`, and it can't be found.
+
+If you want to get at the value of a variable you need to prefix it with a `$`.
+Placing the `$` in front of a parameter causes *parameter substitution*.
+
+TIP: Best practice is to use double quotes when performing parameter substitution.
+
+[source,bash]
+----
+VAR="some file"
+touch "$VAR"
+----
+
+Why double quote? In the case above, `touch` is a program that creates a file. If double quotes were
+not used then two files, `some` and `file`, would be created.
+
+NOTE: Bash has quite a few special parameters. We've seen some already, the positional paramters
+like `1` and `2` and `@` which expands all the positional paramters.
+
+== Making decisions
+
+If statements in Bash let us make decisions. The basic syntax is:
+
+----
+if <command>; then
+fi
+----
+
+_command_ can be a function or a program.
+
+With what we know so far lets make a script that searches a file for some text and prints *"found
+it!"* if it finds the text.
+
+[source, bash]
+----
+include::found-it.sh[]
+----
+<1> `grep` is a program that runs a regular expression search on the file. Regular expressions are a
+complicated topic and some of it will be touched on later.
+<2> We use positional arguments `1` and `2`. The first is the string to find. The second is the name of the
+file.
+<3> -q option to grep means _quiet_. It suppresses output from grep.
+
+.Example
+----
+./found-it.sh "command" bash-0-to-100.adoc
+found it!
+----
+
+Here we search of the string _command_ in this file.
+
+If it finds the string then `grep` returns `0`. If not it returns `1`.
+This might surprise you.
+In shell script `0` is true and any other value is interpreted as false.
+
+We can also use `if` statements with functions we define. Let's create a function `quiet_grep` which
+calls `grep` with `-q`.
+
+.quiet grep
+[source,bash]
+----
+include::quiet-grep.sh[]
+----
+<1> Note the return value of 0 for truth.
+<2> Call our new function `quiet_grep`.
+
+IMPORTANT: Bash uses `0` for truth and any other value as false. This is different from other programming languages.
+
+Can we use if statements with variables as in other languages?
+
+[source,bash]
+----
+VAR=1
+if $VAR; then
+  echo "yes"
+fi
+----
+
+.output
+----
+bash: 1: command not found
+----
+
+Doesn't look like it. This isn't how other languages work.
+
+IMPORTANT: if statements run a _command_. You can't use a parameter _directly_ in an if statement.
+
+How do you test a value of a parameter? If statements require a command so what's the command to
+test parameter values? It's called `test`.
+
+[source,bash]
+----
+VAR=1
+if test $VAR -eq 1; then #<1>
+  echo "yes"
+fi
+----
+<1> `-eq` is short for equals
+
+There are many other options to `test`. At the command prompt type `man test` to see the manual for
+that command. You can move up and down inside the pager using `j` and `k`.  Use `q` to quit.
+
+But writing `test` everytime I want to test something is awkward. Is there another way? Yes.
+
+[source,bash]
+----
+VAR=1
+if [ $VAR -eq 1 ]; then #<1>
+  echo "yes"
+fi
+----
+<1> [ is also a command.
+
+But I thought you said if statements run commands only? Yes, that's true. `[` is a command. It's
+often installed under /usr/bin.
+
+----
+ls -l '/usr/bin/['
+-rwxr-xr-x 1 root root 59528 Mar  7 00:01 '/usr/bin/['
+----
+
+NOTE: Implementations of Bash will implement `[` as a builtin command. In other words it runs in the
+same process as the interpreter and the external command `/usr/bin/[` isn't called.
+
+=== Case statements
+
+:TODO
+
