@@ -7,7 +7,7 @@
 <meta name="generator" content="Asciidoctor 2.0.20">
 <meta name="description" content="FSharp for Imperative.">
 <meta name="keywords" content="f#, functional, imperative">
-<title>F# Interactive</title>
+<title>A tourists guide to F#.</title>
 <style>
 /*! normalize.css v2.1.2 | MIT License | git.io/normalize */
 /* ========================================================================== HTML5 display definitions ========================================================================== */
@@ -727,11 +727,14 @@ table.tableblock.grid-all th.tableblock, table.tableblock.grid-all td.tableblock
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/styles/github.min.css">
 </head>
-<body class="article">
+<body class="book">
 <div id="header">
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
+<ul class="sectlevel0">
+<li><a href="#_a_tourists_guide_to_f">A tourists guide to F#.</a>
 <ul class="sectlevel1">
+<li><a href="#_is_functional_programming_hard">Is functional programming hard?</a></li>
 <li><a href="#_f_interactive">F# Interactive</a>
 <ul class="sectlevel2">
 <li><a href="#_how_do_i_start_the_interactive_mode">How do I start the interactive mode?</a></li>
@@ -790,9 +793,13 @@ table.tableblock.grid-all th.tableblock, table.tableblock.grid-all td.tableblock
 </li>
 <li><a href="#_how_to_replace_objects_with_closures">How to replace objects with closures</a></li>
 </ul>
+</li>
+</ul>
 </div>
 </div>
 <div id="content">
+<div id="preamble">
+<div class="sectionbody">
 <div class="quoteblock">
 <blockquote>
 "I call it my billion-dollar mistake.
@@ -810,6 +817,37 @@ be used in conjunction with F#-declared types, and in practice null-reference ex
 <div class="attribution">
 &#8212; Don Syme<br>
 <cite><a href="https://fsharp.org/history/hopl-final/hopl-fsharp.pdf">The Early History of F#</a></cite>
+</div>
+</div>
+</div>
+</div>
+<h1 id="_a_tourists_guide_to_f" class="sect0">A tourists guide to F#.</h1>
+<div class="openblock partintro">
+<div class="content">
+<div class="paragraph">
+<p>Thinking about using F# but don&#8217;t know where to start? Already know another programming langauge and
+want to learn how to use a functional langauge? This document will guide you by showing the things
+that I had to overcome when learning functional programming. Some of the idioms were new to me and
+coming from an imperative programming langauge background, mainly C and C+\+, there were imperative
+patterns I&#8217;d learnt that, although you use an imperative object oriented style with F#, you&#8217;re
+missing out on the benefits of adopting a functional approach. After all what&#8217;s the point of
+choosing to write programs in a functional programming and then not using funtional idioms.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_is_functional_programming_hard">Is functional programming hard?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Personally, what I found hard was hard unlearning certain idioms I&#8217;d picked up when using imperative
+langauges. For example immutabality is a core component of functional programming, and learning how
+to program by transforming data and not mutating it is key to benefiting from the logical safety of
+a functional language. The hard part is unlearning old habits and forming new ones. For example when
+looping over a data structure in an imperative language there is only really one way to do it and
+the code in the loop that you write is unconstrained. It can do anything to the data. F# provides
+higher order functions to deal with common patterns when iterating over data. But we&#8217;ll get to that
+later. First steps are the mechanics that will get you up and running a program in F#.</p>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -1824,7 +1862,7 @@ For example say you wanted to keep track of the number of times a function is ca
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-07-06 23:43:16 +1000
+Last updated 2024-09-18 22:12:15 +1000
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
