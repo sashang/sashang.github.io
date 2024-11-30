@@ -763,7 +763,7 @@ table.tableblock.grid-all th.tableblock, table.tableblock.grid-all td.tableblock
 </li>
 <li><a href="#_recursion_versus_iteration">Recursion versus Iteration</a>
 <ul class="sectlevel2">
-<li><a href="#_tail_calls">Tail calls</a></li>
+<li><a href="#_avoiding_stack_overflow_when_using_recursion">Avoiding stack overflow when using recursion</a></li>
 <li><a href="#_fold">Fold</a></li>
 </ul>
 </li>
@@ -847,8 +847,8 @@ data. F# provides higher order functions to deal with common patterns when itera
 we&#8217;ll get to that later.</p>
 </div>
 <div class="paragraph">
-<p>But before we depart and hoist the anchor and leave the safe harbour let&#8217;s make sure we have our sea
-legs. We don&#8217;t want to be thrown overboard on the first unexpected twist to starboard.</p>
+<p>But before we hoist anchor let&#8217;s make sure we have our sea legs. We don&#8217;t want to be thrown
+overboard too soon.</p>
 </div>
 </div>
 </div>
@@ -1313,21 +1313,24 @@ There are ways to get around it using <code>fold</code> and/or <code>tail recurs
 </div>
 </div>
 <div class="sect2">
-<h3 id="_tail_calls">Tail calls</h3>
+<h3 id="_avoiding_stack_overflow_when_using_recursion">Avoiding stack overflow when using recursion</h3>
 <div class="paragraph">
-<p>Tail calls are a way to overcome the stackoverflow problem when using
-recurison. When writing a recursive function try to make it tail recursive.
-Typically a recursive function will store the state of the previous call to that function on the stack.
-This consumes memory on the stack and after time will result in a stack overflow error depending on how deep the recursion goes and the stack size.
-Recursive functions that are tail recursive eliminate the need for the result to be stored on the stack.</p>
+<p>Most prorgrammers who haven&#8217;t used functional langauges stay away from recursion because they were
+taught that it can create a stack overflow. There knowledge is lacking. Tail calls are a way to
+overcome the stackoverflow problem when using recurison. A non tail recursive function will store
+the state of the previous call to that function on the stack. This consumes memory on the stack each
+time the recursive function is invoked, possibly resulting in a stack overflow error depending on
+how deep the recursion goes and the stack size. Recursive functions that are tail recursive
+eliminate the need for the state to be tracked on the stack.</p>
 </div>
 <div class="paragraph">
-<p><em>What is tail recursion?</em> It means the final thing that the function does is is the recursive
-function itself.</p>
+<p><em>How can you tell if a function is tail recursive?</em> Look at the function and if the final thing it
+does is recurse then it is tail recursive.</p>
 </div>
 <div class="paragraph">
 <p>Note that the factorial function above is not tail recursive.
-The last thing that function does is multiply 2 values.
+The last thing that function does is multiply 2 values which contravenes the definiton of tail
+recursion above.
 The example below shows a tail recursive function. It prints the elements in the list.</p>
 </div>
 <div class="listingblock">
@@ -1341,9 +1344,8 @@ The example below shows a tail recursive function. It prints the elements in the
 </div>
 </div>
 <div class="paragraph">
-<p><em>How do we convert a recursive function into a
-tail recursive function?</em> We thread an accumulator parameter through the
-function.</p>
+<p><em>How do we convert a recursive function into a tail recursive function?</em>
+We thread an accumulator parameter through the function.</p>
 </div>
 <div class="paragraph">
 <p>For example, in the following factorial function, the function <code>helper</code> uses an accumulator parameter and is tail recursive.</p>
@@ -1358,11 +1360,16 @@ function.</p>
   helper x 1</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>This function, <code>helper</code>, satisifies the test of a tail recursive function. The function called in it
+is the function itself.</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_fold">Fold</h3>
 <div class="paragraph">
-<p>Fold is an extension of the accumulator idea shown above. The modules list, seq and array all have <code>fold</code> functions in them.</p>
+<p>Fold is an extension of the accumulator idea shown above. The modules list, seq and array all have
+<code>fold</code> functions in them.</p>
 </div>
 <div class="paragraph">
 <p>The following example shows how one can sum the elements using a fold.</p>
@@ -1404,13 +1411,13 @@ Along the way you fill in the shapes with untyped data, bringing type informatio
 by its type and then initialising it. This is because <code>F#</code> uses type inference to
 figure out what the type of the value is. This can take some getting used to,
 and the compiler errors can cause some frustration, but it comes with practice,
-and it&#8217;s easier than dealing with <code>C++</code> template errors.</p>
+and it&#8217;s easier than dealing with C++ template errors.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_unit">Unit</h3>
 <div class="paragraph">
-<p>Unit type is special. It&#8217;s like <code>void</code> in <code>C++</code> but it&#8217;s a proper type and has a literal symbol <code>()</code> that represents it.
+<p>Unit type is special. It&#8217;s like <code>void</code> in C++ but it&#8217;s a proper type and has a literal symbol <code>()</code> that represents it.
 If you want your expression to evaluate to nothing, then end it with <code>()</code>.
 It&#8217;s often used in contexts where imperative langauges are the norm, like the .NET classes.</p>
 </div>
@@ -1426,7 +1433,7 @@ It&#8217;s often used in contexts where imperative langauges are the norm, like 
 <h3 id="_discriminated_unions">Discriminated Unions</h3>
 <div class="paragraph">
 <p>These are so simple yet so powerful.
-At first glance they might look like an <code>enum</code> or a <code>union</code> in <code>C++</code> but they are very different.
+At first glance they might look like an <code>enum</code> or a <code>union</code> in C++ but they are very different.
 They can be used to represent enumerations but they can scale to represent other things as well.
 They are unions, like unions in <code>C</code>, in the sense that only one of them is valid at the same time.
 But where a union in <code>C</code> is more like syntactic sugar for representing the underlying memory, discriminated unions form a set of from which a variable of that type can only take on one value.</p>
@@ -1503,7 +1510,7 @@ The type of <code>a</code> is <code>Fruit</code> and not <code>Apple</code>. <co
 <div class="sect2">
 <h3 id="_records">Records</h3>
 <div class="paragraph">
-<p>A record is like a struct in <code>C++</code>.
+<p>A record is like a struct in C++.
 It can contain multiple distinct named types.</p>
 </div>
 <div class="listingblock">
@@ -1698,7 +1705,7 @@ You can say <em>oh this function only works with types that have a member functi
 <td class="content">
 Statically resolved types are only useable in inline functions.
 This is because the compiler has to generate specialisations for each function when the types infered are different.
-<code>C++</code> programmers will probably recognise the similarity here with the template mechanism.
+C++ programmers will probably recognise the similarity here with the template mechanism.
 </td>
 </tr>
 </table>
@@ -1864,7 +1871,7 @@ For example say you wanted to keep track of the number of times a function is ca
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-11-30 17:49:28 +1100
+Last updated 2024-11-30 18:35:25 +1100
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>

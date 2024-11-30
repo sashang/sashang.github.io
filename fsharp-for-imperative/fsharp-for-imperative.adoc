@@ -32,8 +32,8 @@ one way to do it and the code in the loop that you write is unconstrained. It ca
 data. F# provides higher order functions to deal with common patterns when iterating over data. But
 we'll get to that later. 
 
-But before we depart and hoist the anchor and leave the safe harbour let's make sure we have our sea
-legs. We don't want to be thrown overboard on the first unexpected twist to starboard.
+But before we hoist anchor let's make sure we have our sea legs. We don't want to be thrown
+overboard too soon.
 
 == F# Interactive
 
@@ -413,19 +413,22 @@ let fac x =
     state
 ----
 
-=== Tail calls
+===  Avoiding stack overflow when using recursion
 
-Tail calls are a way to overcome the stackoverflow problem when using
-recurison. When writing a recursive function try to make it tail recursive.
-Typically a recursive function will store the state of the previous call to that function on the stack.
-This consumes memory on the stack and after time will result in a stack overflow error depending on how deep the recursion goes and the stack size.
-Recursive functions that are tail recursive eliminate the need for the result to be stored on the stack.
+Most prorgrammers who haven't used functional langauges stay away from recursion because they were
+taught that it can create a stack overflow. There knowledge is lacking. Tail calls are a way to
+overcome the stackoverflow problem when using recurison. A non tail recursive function will store
+the state of the previous call to that function on the stack. This consumes memory on the stack each
+time the recursive function is invoked, possibly resulting in a stack overflow error depending on
+how deep the recursion goes and the stack size. Recursive functions that are tail recursive
+eliminate the need for the state to be tracked on the stack.
 
-_What is tail recursion?_ It means the final thing that the function does is is the recursive
-function itself.
+_How can you tell if a function is tail recursive?_ Look at the function and if the final thing it
+does is recurse then it is tail recursive.
 
 Note that the factorial function above is not tail recursive.
-The last thing that function does is multiply 2 values.
+The last thing that function does is multiply 2 values which contravenes the definiton of tail
+recursion above.
 The example below shows a tail recursive function. It prints the elements in the list.
 
 [source, fsharp]
@@ -438,9 +441,8 @@ let rec tailf l =
         tailf xs
 ----
 
-_How do we convert a recursive function into a
-tail recursive function?_ We thread an accumulator parameter through the
-function.
+_How do we convert a recursive function into a tail recursive function?_ 
+We thread an accumulator parameter through the function.
 
 For example, in the following factorial function, the function `helper` uses an accumulator parameter and is tail recursive.
 
@@ -455,9 +457,13 @@ let fac x =
 
 ----
 
+This function, `helper`, satisifies the test of a tail recursive function. The function called in it
+is the function itself.
+
 === Fold
 
-Fold is an extension of the accumulator idea shown above. The modules list, seq and array all have `fold` functions in them.
+Fold is an extension of the accumulator idea shown above. The modules list, seq and array all have
+`fold` functions in them.
 
 The following example shows how one can sum the elements using a fold.
 
@@ -490,11 +496,11 @@ You'll notice that the examples don't follow the pattern of defining a variable
 by its type and then initialising it. This is because `F#` uses type inference to
 figure out what the type of the value is. This can take some getting used to,
 and the compiler errors can cause some frustration, but it comes with practice,
-and it's easier than dealing with `C++` template errors.
+and it's easier than dealing with {cpp} template errors.
 
 === Unit
 
-Unit type is special. It's like `void` in `C++` but it's a proper type and has a literal symbol `()` that represents it.
+Unit type is special. It's like `void` in {cpp} but it's a proper type and has a literal symbol `()` that represents it.
 If you want your expression to evaluate to nothing, then end it with `()`.
 It's often used in contexts where imperative langauges are the norm, like the .NET classes.
 
@@ -508,7 +514,7 @@ let foo () =
 === Discriminated Unions
 
 These are so simple yet so powerful.
-At first glance they might look like an `enum` or a `union` in `C++` but they are very different.
+At first glance they might look like an `enum` or a `union` in {cpp} but they are very different.
 They can be used to represent enumerations but they can scale to represent other things as well.
 They are unions, like unions in `C`, in the sense that only one of them is valid at the same time.
 But where a union in `C` is more like syntactic sugar for representing the underlying memory, discriminated unions form a set of from which a variable of that type can only take on one value.
@@ -568,7 +574,7 @@ NOTE: The type of `a` is `Fruit` and not `Apple`. `Fruit` has a set of construct
 
 === Records
 
-A record is like a struct in `C++`.
+A record is like a struct in {cpp}.
 It can contain multiple distinct named types.
 
 [source, fsharp]
@@ -723,7 +729,7 @@ You can say _oh this function only works with types that have a member function 
 
 NOTE: Statically resolved types are only useable in inline functions.
 This is because the compiler has to generate specialisations for each function when the types infered are different.
-`C++` programmers will probably recognise the similarity here with the template mechanism.
+{cpp} programmers will probably recognise the similarity here with the template mechanism.
 
 In fact, statically resolved types have more in common behaviourally with templates than the standard generic type parameters.
 The example given at https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/generics/statically-resolved-type-parameters[MSDN is complicated] felt like playing Doom with a controller, so I've concocted a simpler example here.
