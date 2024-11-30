@@ -1,0 +1,847 @@
+:description: FSharp for Imperative.
+:keywords: f#, functional, imperative
+:stylesheet: readthedocs.css
+:source-highlighter: highlight.js
+:highlightjs-languages: fsharp
+:toc:
+:cpp: C++
+
+""I call it my billion-dollar mistake."
+-- Tony Hoare on null references, https://en.wikipedia.org/wiki/Tony_Hoare
+
+""From the outset, F# placed non-nullness as central to its design: the value “null” can’t normally
+be used in conjunction with F#-declared types, and in practice null-reference exceptions are rare.""
+-- Don Syme, https://fsharp.org/history/hopl-final/hopl-fsharp.pdf[The Early History of F#]
+
+= The Captain's Logbook to F#.
+
+Thinking about using F# but don't know where to start? Already know another programming langauge and
+want to learn how to use a functional langauge? This document will guide you by showing the things
+that I had to overcome when learning functional programming. It's like the captain's log book,
+showing you where the hidden reefs are or where the nearest safe harbour is when you want to avoid a
+stormy sea. 
+
+== Is functional programming hard?
+
+Personally, what I found challenging was unlearning idioms I'd picked up when using imperative and
+object oriented langauges. For example immutabality is a core component of functional programming,
+and learning how to program by transforming data and not mutating it is key to benefiting from the
+logical safety of a functional language. The hard part is unlearning old habits and forming new
+ones. For example when looping over a data structure in an imperative language there is only really
+one way to do it and the code in the loop that you write is unconstrained. It can do anything to the
+data. F# provides higher order functions to deal with common patterns when iterating over data. But
+we'll get to that later. 
+
+But before we depart and hoist the anchor and leave the safe harbour let's make sure we have our sea
+legs. We don't want to be thrown overboard on the first unexpected twist to starboard.
+
+== F# Interactive
+
+=== How do I start the interactive mode?
+
+There is a `F#` interpreter you can use interactively.
+You can start it from the command line like this:
+
+```
+dotnet fsi
+```
+
+Then type your expression and end it with a double semi-colon for the expression evaluation to kick in.
+The double semi-colon is inherited from ML, the language `F#` is derived from.
+For example:
+
+```
+dotnet fsi
+
+Microsoft (R) `F#` Interactive version 11.4.2.0 for `F#` 5.0
+Copyright (c) Microsoft Corporation. All Rights Reserved.
+
+For help type #help;;
+
+> let x = 1
+- let y = 3;;
+val x : int = 1
+val y : int = 3
+
+>
+```
+
+Note that when using the compiler you don't need the double semi-colon to end an expression.
+
+=== How do I quit interactive mode?
+
+It's easier than Vim
+
+```
+#quit;;
+```
+
+=== How do I write to the console?
+
+Writing to the console we can use `printfn`.
+
+[source, fsharp]
+----
+printfn "%s" "hello";;
+----
+
+Format specifiers are similar to the ones in `C`, except `%A` which renders any
+type.
+
+== Formatting
+
+=== Is whitespace significant?
+
+`F#` is whitespace and indentation sensitive.
+The guide to formatting is https://docs.microsoft.com/en-us/dotnet/fsharp/style-guide/formatting[here].
+In summary:
+
+- Use spaces not tabs.
+- 4 spaces is prefered.
+- You can use https://github.com/fsprojects/fantomas/#fantomas[Fantomas] to format code.
+
+=== How does indentation scope things in F#?
+
+This can be confusing for people coming from a language where indentation isn't significant.
+For example, the following two programs have different behaviours.
+
+[source, fsharp]
+----
+open System
+
+[<EntryPoint>]
+let main argv =
+    let foo () =
+        printfn "foo"
+        printfn "something"
+    foo ()
+    0
+----
+
+```
+foo
+something
+```
+
+[source, fsharp]
+----
+open System
+
+[<EntryPoint>]
+let main argv =
+    let foo () =
+        printfn "foo"
+    printfn "something"
+    foo ()
+    0
+----
+
+```
+something
+foo
+```
+
+Identation is used to create expression blocks.
+There is a mode the compiler can run in called verbose mode that is more compatible with OCaml syntax where expression blocks are explicitly delimited with `begin` and `end` keywords, but it's rarely used in practice.
+
+=== What the hell is offsides?
+
+NOTE: The following explanation is a simplification of the rule.
+
+The 'offside' rule determines the column infront of which no other tokens are allowed.
+The first character after an `=` marks the column that subsequent expressions have to start at.
+It's best illustrated with an example.
+
+
+[source, fsharp]
+----
+open System
+
+[<EntryPoint>]
+let main argv =
+    printfn "main" // p is the first character after =. It determines the offsides column
+  let x = 1 // Compiler error at this line
+  0
+----
+
+```
+/home/sashan/code/tests/test/Program.fs(8,3): error FS0010: Unexpected keyword 'let' or 'use' in binding. Expected incomplete structured construct at or before this point or other token. [/home/sashan/code/tests/test/test.fsproj]
+/home/sashan/code/tests/test/Program.fs(6,1): error FS3118: Incomplete value or function definition. If this is in an expression, the body of the expression must be indented to the same column as the 'let' keyword. [/home/sashan/code/tests/test/test.fsproj]
+```
+
+Another example that doesn't compile. The line `printfn "something"` does not start in the same column as the the
+first character after the equals.
+
+[source, fsharp]
+----
+let foo () = printfn "foo"
+    printfn "something" //this won't compile
+----
+
+The corrected version.
+
+[source, fsharp]
+----
+let foo () = printfn "foo"
+             printfn "something" //now this compiles
+----
+
+However it's better to write it like this:
+
+[source, fsharp]
+----
+let foo () =
+    printfn "foo"
+    printfn "something" //now this compiles
+----
+
+== How do I resolve type mismatch errors?
+
+This is probably the most common error you will get when trying to get your F# code to compile.
+Let's have a look at the example below.
+
+----
+> let foo x =
+-     x + 2.0;;
+val foo : x:float -> float
+
+> foo 1;;
+
+  foo 1;;
+  ----^
+
+/home/sashan/code/articles/fsharp-for-imperative/stdin(3,5): error FS0001: This expression was expected to have type
+    'float'
+but here has type
+    'int'
+
+>
+----
+
+What's going on here? The compiler parses the function `foo` and infers the type of the argument to be a `float` because the type of the expression `x + 2.0` is inferred to be a `float` because the type of `2.0` is float.
+Effectively the compiler recurses through the expressions to find a terminal type to infer the type of the non-terminal expressions.
+You can do a similar thing, and pretend to be the compiler and recurse until you find a terminal type.
+Let's look at a more complicated example.
+
+[source, fsharp]
+----
+type R1 = {
+    Name : string
+    Age : int
+    Email : string
+}
+
+type R2 = {
+    Name : string
+    Email : string
+}
+
+let printName x =
+    let {R1.Name = name} = x
+    printfn "%s" name
+
+let x = {Name = "bob";Email="bob@somewhere.com"}
+
+printName x
+----
+
+In this case we get the following error:
+
+----
+Error: input.fsx (18,11)-(18,12) typecheck error This expression was expected to have type
+    'R1'
+but here has type
+    'R2'
+----
+
+at the line `printName x`. Clearly here it has resolved `x` to be of type `R2`, however in the function definition we match on `R1` when destructuring the value.
+
+== Concepts
+
+=== Why are variables immutable by default?
+
+This will probably be a mind expanding experience for those familiar with normal languages.
+It makes programming in a functional language harder, harder because you can't just reach out and change the state of a variable.
+In general you have to take the old value as input to function, use the function to transform the value, and return a new value.
+If this seems like pointless effort, well you're half right. Effort - yes. Pointless - no.
+Immutability makes it easier to reason about program correctness.
+Programs that manipulate shared mutable variables require access to that state to be locked. This opens to the door to other problems such as deadlocks and race conditions. The tradeoff is that performance traditionally is improved by the use of shared state, whereas immutability often implies copying of data, which incurs a performance cost.
+For example the properties of REST, i.e. stateless and idempotent, naturally emerge if the code you write is immutable.
+Since correctness and robustness of programs was a core design property of F#, immutability became a property of the language.
+That said, because F# is also pragmatic and needs to operate with .NET which is imperative, there is support for mutable variables in the language.
+However, if you write your programs maximising the use of immutable variables, it will synchronize well with the rest of the F# ecosystem, and makes programming using the language easy. There are some edge cases where this doesn't apply, task expressions being one of them.
+
+.F#
+[source, fsharp]
+----
+let x = 1
+----
+
+is similar to
+
+.c++
+[source, c++]
+----
+const int x = 1;
+----
+
+We say that `x` is bound to a value, and the construct is called a `let
+binding`. We don't use the term `assigned`.
+
+== Functions
+
+We don't call functions.
+We say we `apply a function`, or a `function is applied`.
+_So how do I apply a function?_
+You have to give it an argument.
+
+[source, fsharp]
+----
+let saySomething something = printfn "I say %s" something
+...
+saySomething "hello"
+----
+
+We don't use parantheses to apply functions.
+Instead we pass in the next argument.
+_But wait, I've seen cases where parantheses are used to call functions. What's going on?_
+Sometimes that's a tuple or the unit value.
+
+=== Functions, unit values and side-effect.
+
+There is a difference between binding a name to a value and a name to a function.
+
+For example, in the following code, the value `1` is bound to `x`
+[source, fsharp]
+----
+let x = 1
+----
+
+A value is only ever evaluated once.
+This can be seen in the following example.
+
+[source, fsharp]
+----
+> let tothemoon = printfn "to the moon";;
+to the moon
+val tothemoon : unit = ()
+
+> tothemoon;;
+val it : unit = ()
+
+> tothemoon;;
+val it : unit = ()
+
+> tothemoon;;
+val it : unit = ()
+
+>
+----
+
+So what's going on? `F#` realises that the `printfn` returns `unit`, evalutes the expression, and binds the resultant value to the indentifier `tothemoon`.
+Remember, `F#` is a functional language and thinks that a function given the same input should return output that's the same.
+In this case, `tothemoon` takes no input arguments, therefore its value should never change.
+If its value is never changing, there's no need to evaluate it more than once.
+And this is the chain of logic `F#` is following, which is why we don't see multiple lines of "to the moon" in the console.
+_So how can we change this, because I want the side-effect to happen?_
+We pass an argument to the function.
+It can be any other value or another function.
+In this case we will pass the unit value to the function.
+The unit value is a special value of type unit.
+It simply acts as a space filler, a do nothing argument.
+
+[source, fsharp]
+----
+> let tothemoon () = printfn "to the moon";;
+val tothemoon : unit -> unit
+
+> tothemoon ();;
+to the moon
+val it : unit = ()
+
+> tothemoon ();;
+to the moon
+val it : unit = ()
+
+> tothemoon ();;
+to the moon
+val it : unit = ()
+----
+
+_Ok, but that still doesn't make sense. The argument is always the same value, so shouldn't it only be evaluated once?_
+I asked the https://stackoverflow.com/questions/69997578/whats-the-theoretical-loophole-that-allows-f-or-any-functional-language-to-a/69999798#69999798[question on StackOverflow].
+Basically `F#` makes no distinction between pure and impure functions therefore the compiler cannot memoize the function, so it can't remember that the previous result of a call to that function with a specific argument.
+
+=== Returning values
+
+Everything is an expression so write the expression your function evaluates to.
+
+[source, fsharp]
+----
+let add x y = x + y
+...
+add (mult 2 3) 2
+----
+
+Note the placement of parentheses.
+They encompass the first expression.
+You have to do this since whitespace delimits arguments, so if the argument itself is an expression, then you need to use parantheses to group it, and tell the compiler that the expression is a single argument.
+
+== Recursion versus Iteration
+
+A fundamental difference between recursion and iteration is that the recursive one requires no mutable variables.
+Therefore a guideline when to use recursion is when immutability provides a benefit, for example, in concurrent programming.
+The downside of recursion, is that it consumes stack space and recursing too deeply will eventually cause a stack overflow.
+There are ways to get around it using `fold` and/or `tail recursion`.
+
+.Recursive factorial in F#
+[source, fsharp]
+----
+let rec fac x =
+  match x with
+  | 0 -> 1
+  | _ -> x * fac (x - 1)
+----
+
+.Iterative factorial
+[source, fsharp++]
+----
+let fac x =
+    let mutable state = 1
+    for i in 1 .. x do
+        state <- state * i
+    state
+----
+
+=== Tail calls
+
+Tail calls are a way to overcome the stackoverflow problem when using
+recurison. When writing a recursive function try to make it tail recursive.
+Typically a recursive function will store the state of the previous call to that function on the stack.
+This consumes memory on the stack and after time will result in a stack overflow error depending on how deep the recursion goes and the stack size.
+Recursive functions that are tail recursive eliminate the need for the result to be stored on the stack.
+
+_What is tail recursion?_ It means the final thing that the function does is is the recursive
+function itself.
+
+Note that the factorial function above is not tail recursive.
+The last thing that function does is multiply 2 values.
+The example below shows a tail recursive function. It prints the elements in the list.
+
+[source, fsharp]
+----
+let rec tailf l =
+    match l with
+    | [] -> ()
+    | x::xs ->
+        printfn "%A" x
+        tailf xs
+----
+
+_How do we convert a recursive function into a
+tail recursive function?_ We thread an accumulator parameter through the
+function.
+
+For example, in the following factorial function, the function `helper` uses an accumulator parameter and is tail recursive.
+
+[source, fsharp]
+----
+let fac x =
+  let rec helper x acc =
+    match x with
+    | 0 -> acc
+    | _ -> helper (x - 1) (x * acc)
+  helper x 1
+
+----
+
+=== Fold
+
+Fold is an extension of the accumulator idea shown above. The modules list, seq and array all have `fold` functions in them.
+
+The following example shows how one can sum the elements using a fold.
+
+[source, fsharp]
+----
+let l = [1;2;3]
+List.fold (fun acc x -> x + acc) 0 l
+----
+
+The first parameter to `fold` is the function that operates on the accumulated value (state). It's a function of 2 parameters that takes the accumulator and an element from the list. The accumulator is used to thread the value between calls to the function. The second parameter is the initial value of the accumulator. In this case, because we want to sum the elements, we set it to 0.
+Internally `fold` uses a for loop and a mutable state variable, which means it's safe from stack overflow.
+
+== Types
+
+`F#` loves types.
+Working with types is easy in `F#` and you'll get the most out of
+the language in terms of correctness if you use them liberally.
+They will save you writing trivial unit tests, so you can focus on the unit tests that
+matter.
+You'll be surprised when your program runs correctly for the first time.
+
+Personally, I think of programming in `F#` as programming in with shapes.
+The shapes are the types you define, and the functions morph the shapes.
+Along the way you fill in the shapes with untyped data, bringing type information to what was previously untyped, and safely transform the typed data with your functions.
+`F#` has enough power to peel apart these shapes, via pattern matching, and recombine them easily.
+
+=== Type Inference
+
+You'll notice that the examples don't follow the pattern of defining a variable
+by its type and then initialising it. This is because `F#` uses type inference to
+figure out what the type of the value is. This can take some getting used to,
+and the compiler errors can cause some frustration, but it comes with practice,
+and it's easier than dealing with `C++` template errors.
+
+=== Unit
+
+Unit type is special. It's like `void` in `C++` but it's a proper type and has a literal symbol `()` that represents it.
+If you want your expression to evaluate to nothing, then end it with `()`.
+It's often used in contexts where imperative langauges are the norm, like the .NET classes.
+
+[source, fsharp]
+----
+let foo () =
+  bar param1
+  ()
+----
+
+=== Discriminated Unions
+
+These are so simple yet so powerful.
+At first glance they might look like an `enum` or a `union` in `C++` but they are very different.
+They can be used to represent enumerations but they can scale to represent other things as well.
+They are unions, like unions in `C`, in the sense that only one of them is valid at the same time.
+But where a union in `C` is more like syntactic sugar for representing the underlying memory, discriminated unions form a set of from which a variable of that type can only take on one value.
+
+[source, fsharp]
+----
+type Fruit =
+  | Apple
+  | Orange
+  | Pear
+----
+
+The fruit names, `Apple` `Orange` and `Pear`, are called `constructors`.
+They are used to construct the type `Fruit`.
+
+[source, fsharp]
+----
+let fruit = Apple
+----
+
+Now that we know the type of `fruit` we know that it can only be one of the constructors in the set defined by the DU `Fruit`.
+This gives the compiler more information to work.
+DU's go hand in hand with pattern matching and match expressions, so I'll show an example here:
+
+[source, fsharp]
+----
+let fruitName fruit =
+  match fruit with
+  | Apple -> "apple"
+  | Orange -> "orange"
+  | Pear -> "pear"
+----
+
+The compiler can make use of the knowledge about `Fruit`.
+If for example a match clause is missed, like `Pear` above, the compiler will warn you that you've missed a case.
+This extends even deeper and works with pattern matched clauses as well. It's not simply a literal `oh I'm missing a Pear from my
+match statement therefore I must warn` algorithm.
+
+A DU can be defined in terms of other types.
+
+[source, fsharp]
+----
+type Fruit =
+  | Apple of string
+  | Orange of string
+  | Pear of string
+----
+
+And can be created using the `constructor`:
+
+[source, fsharp]
+----
+let a = Apple "apple"
+----
+
+NOTE: The type of `a` is `Fruit` and not `Apple`. `Fruit` has a set of constructors of which `Apple` is one.
+
+=== Records
+
+A record is like a struct in `C++`.
+It can contain multiple distinct named types.
+
+[source, fsharp]
+----
+type User =
+    { FirstName : string
+      LastName : string
+      Email : string }
+----
+
+You can create a record simply by writing its inner names.
+
+[source, fsharp]
+----
+let initUser first last email =
+  {FirstName = first; LastName = last; Email = email}
+----
+
+If there is a name clash you can use the fully qualified name:
+
+[source, fsharp]
+----
+let initUser first last email =
+  {User.FirstName = first; User.LastName = last; User.Email = email}
+----
+
+Matching a record can be done like this:
+
+[source, fsharp]
+----
+match user with
+| {Firstname = "sashan"} -> printfn "alive"
+| _ -> printfn "unknown"
+----
+
+The `_` means _I don't care_ about that value. It matches anything.
+
+=== Tuples
+
+A tuple can contain multiple unamed distinct types.
+
+=== Option and Result
+
+Use this type instead of sentinel value.
+
+=== Structural equality
+
+`F#` has structural equality.
+All types can be compared for equality without writing a comparison object, as you might have to do in `C#`
+Additionally, because there are no nulls in the language, one doesn't have to write code to check for that invariant.
+
+=== Side-effects
+
+Understand what a side-effect is.
+It's not the same as a medical side-effect, which is bad and unintended. Intentionallity has nothing to do with it.
+In computer science the term side-effect has a different meaning from colloquial usage.
+Understand it from the perspective of the function.
+If a function returns a value and changes the state of another entity in the process of calculating that value to return, then it has a side-effect.
+For example the function could change a database. The change to the database is a side-effect.
+It happens as a side-effect of applying that function.
+
+== Assignment
+
+Although we want to write code immutably, there will be times you will need assign values, especially when working with the .NET classes.
+To create a mutable value (a variable) we use the `mutable` keyword and use `<-` for assignment.
+
+[source, fsharp]
+----
+let mutable x = 1
+
+x <- 2
+----
+
+== Asynchronous programming
+
+One of `F#'s` core features is a model for asynchronous programming.
+Since then other languages have added support for asynchronous programming, in various ways.
+`F#` added it to the language based on an underlying extensible feature called _computation expressions_.
+Computation expressions essentially allow one to define a monadic type.
+However, all of this is already getting too academic, and detracting from the core of what I want to show, that is how to use `async expressions`.
+
+=== Problem
+The problem that `async` solves are the problems associated with callback funtions.
+In `C`, for example, say you wanted to read from the console. One way to do it would be to call a function that waits for the input from the user.
+This is synchronous programming.
+Control flow is paused and the thread waits for the operating system to tell it when the data is available to return to the user.
+Another way is to register a callback function. This function is called back by the operating system when data is available.
+This allows asynchronousity at the expense of cohesion.
+Control flow is inverted which makes it hard to trace through the logic of the code as a human who has to understand it.
+Additonally one must think about how to share variables between the callback function and the main flow of the program.
+
+=== A basic example
+
+Here's an example of a request to get a webpage. In this case I haven't handled the async call `GetAsync` properly and if run the code will exit before the value from the async is returned.
+
+[source, fsharp]
+----
+open System.Net.Http
+
+let get () =
+    let uri = "http://www.contoso.com"
+    use client = new HttpClient()
+    let response = client.GetAsync(uri)
+    printfn "%A" response
+
+get ()
+----
+
+Now I'm going to handle the async call with a 'callback' that prints the response.
+
+[source, fsharp]
+----
+open System.Net.Http
+
+let get = async {
+    let uri = "http://www.contoso.com"
+    use client = new HttpClient()
+    let! response = client.GetAsync(uri) |> Async.AwaitTask
+    // here onwards is the callback
+    printfn "%A" response
+}
+get |> Async.RunSynchronously
+----
+
+There you go. That's it. The callback is really the stuff at the printfn line and beyond.
+This will look like magic to `C/C++` programmers. When I learned `F#` around 2010 it looked like magic to me.
+In fact it was mind-blowing. Now I could handle the same variable in scope and flow of control wasn't inverted.
+Now it's 2022 and a lot of languages have caught onto this paradigm and have some way to do asynchronous programming.
+Probably the most famous of these is `Go`. footnote:[It's interesting and somewhat scary to think that `F#` had a model for doing async before `Go` was born, yet the industry overlooked `F#` or didn't recognise that it had this quality that could have made many programmers jobs writing concurrent systems a lot easier. Why? A hive minded mentality from developers? Nobody gets blamed for using `C#` or `Java` for some enterprisey system. Java had a lot of hype in the 2000s, was the people's choice and came out of the underdog Sun Microsystems. They were Unix and they had beards, and that meant they must be smart, smarter than Microsoft the bad guy. All those factors combined to make it hard for F# to stand out despite what at the time was a killer feature that no other language had. Now it's 2022, most mainstream languages have some support for asynchronous programming, either cleanly or butchered into the language, and Oracle's the bad guy, Microsoft ship Linux inside Windows and own Github (two things Linus Torvalds created), and Sun Microsystems doesn't exist.]
+
+Let's explain what's going on here.
+The `async { ... }` block is a _computation expression_. Don't worry about what that is for now, just know that it's another feature of the the language and you can define your own computation expressions.
+However, computation expressions open the door to `let!` and other keywords that are suffixed with a `!`.
+What does that `!` mean?
+It means `await` the result of the expression and in the case of `let!` bind it to the name given.
+What is being waited on (awaited)? We need something that is `Async<'u>` to await. However the return type of GetAsync is a `Task<'u>` object. When interoperating with .NET libraries you'll find that most of them return `Task`.
+Now we have to convert this task to an `Async<'u>` and that's what `Async.AwaitTask` lets us do.
+Now we can await the result and bind it using `let! response =...`. You can think of `let!` as a way to unwrap the type and get at what is inside `Async`. Thus, `response` becomes a value of type `'u`.
+
+Finally we have the line `get |> Async.RunSynchronously`. It takes an async block and runs it.
+If we don't pass the block to `RunSynchronously` it won't run.
+
+
+== Generics
+
+=== How do statically resolved type parameters work?
+
+Statically resolved type parameters are used to constrain types passed to functions.
+They're a way to specify that a parameter to a function should support certain members if it is to be used within that function.
+It does this by allowing you to specify constraints for that parameter, for example, the specific function that the parameter should have.
+You can say _oh this function only works with types that have a member function called `foo`_
+
+NOTE: Statically resolved types are only useable in inline functions.
+This is because the compiler has to generate specialisations for each function when the types infered are different.
+`C++` programmers will probably recognise the similarity here with the template mechanism.
+
+In fact, statically resolved types have more in common behaviourally with templates than the standard generic type parameters.
+The example given at https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/generics/statically-resolved-type-parameters[MSDN is complicated] felt like playing Doom with a controller, so I've concocted a simpler example here.
+
+We define 3 types.
+
+[source, fsharp]
+----
+type T =
+    | TCons
+    static member identity x = x
+
+type U =
+    | UCons
+    static member identity x = x
+
+type W =
+    | WCons
+
+let inline foo< ^a when ^a : (static member identity : ^a -> ^a) > (x : ^a) =
+    T.identity x
+----
+
+NOTE: The space between `<` and  `^a` in the type parameter of `foo` is important.
+It won't compile without the space.
+
+Two of them have a member `identity` that does nothing, i.e. it returns its argument unchanged.
+The function `foo` takes a parameter of type `^a` which is constrained.
+The constraint itself, that is starting to look a lot like line noise, says the type `^a` should have a member `identity` that takes a parameter that is the same as itself, `^a`, and returns a value of type `^a`.
+If a type is passed to `foo` that does not satisfy that constraint the compiler will complain.
+
+[source, fsharp]
+----
+let x = TCons
+let y = UCons
+let z = WCons
+
+foo x // Ok
+foo y // Ok
+foo z // Not ok
+----
+
+You get the error
+
+----
+error FS0001: The type 'W' does not support the operator 'identity'
+----
+
+because `W` does not have a member `identity` that satisfies the contraint on `foo`.
+
+But there's still something not quite right here.
+I want my function `foo` to call the `identity` member function that is of the same type of the value.
+
+In other words, instead of:
+
+[source,fsharp]
+----
+T.identity x
+----
+
+I want:
+
+[source, fsharp]
+----
+^a.identity
+----
+
+Except this doesn't compile.
+The good news is that there is a way to do this.
+The bad news is that the syntax is awkward.
+
+[source, fsharp]
+----
+let inline foo< ^a when ^a : (static member identity : ^a -> ^a) > (x : ^a) =
+    (^a : (static member identity : ^a -> ^a) x)
+----
+
+And that does it.
+When `identity` is applied from `foo` that will use the member function belonging to the type `x`.
+If we add some `printfn` expressions to the `identity` functions then we can trace the execution of `identity` functions.
+
+[source, fsharp]
+----
+type T =
+    | TCons
+    static member identity x = printfn "T identity"; x
+
+type U =
+    | UCons
+    static member identity x = printfn "U identity"; x
+
+type W =
+    | WCons
+
+let inline foo< ^a when ^a : (static member identity : ^a -> ^a) > (x : ^a) =
+    (^a : (static member identity : ^a -> ^a) x)
+
+let x = TCons
+let y = UCons
+
+foo x
+foo y
+----
+
+and the output
+
+----
+T identity
+U identity
+----
+
+Technically this is an example of _parametric polymorphism_.
+We're getting polymorphic behaviour, because a different `identity` function is executed depending on the type of the parameter.
+The other type of polymorphism you are familiar with, _dynamic polymorphism_, presents itself in the context of inheritance in object oriented programming.
+In that case the function called is selected at runtime.
+In the case of statically resolved type parameters the function is selected at compile time.
+
+== How to replace objects with closures
+
+Coming from an object oriented programming language you might struggle to see how to maintain state. The trick is to use a closure. Briefly a closure wraps the things it can see, like values, into it's environment and carries it around with it. This allows you to maintain state.
+For example say you wanted to keep track of the number of times a function is called. In an OO language you'd create an object and make the function a member. The member function increments a counter each time that member is called.
