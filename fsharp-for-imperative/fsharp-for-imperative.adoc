@@ -141,8 +141,9 @@ something
 foo
 ```
 
-Identation is used to create expression blocks.
-There is a mode the compiler can run in called verbose mode that is more compatible with OCaml syntax where expression blocks are explicitly delimited with `begin` and `end` keywords, but it's rarely used in practice.
+Identation is used to create expression blocks. There is a mode the compiler can run in called
+verbose mode that is more compatible with OCaml syntax where expression blocks are explicitly
+delimited with `begin` and `end` keywords, but it's rarely used in practice.
 
 === What the hell is offsides?
 
@@ -218,9 +219,13 @@ but here has type
 >
 ----
 
-What's going on here? The compiler parses the function `foo` and infers the type of the argument to be a `float` because the type of the expression `x + 2.0` is inferred to be a `float` because the type of `2.0` is float.
-Effectively the compiler recurses through the expressions to find a terminal type to infer the type of the non-terminal expressions.
-You can do a similar thing, and pretend to be the compiler and recurse until you find a terminal type.
+What's going on here? The compiler parses the function `foo` and infers the type of the argument to
+be a `float` because the type of the expression `x + 2.0` is inferred to be a `float` because the
+type of `2.0` is float.
+Effectively the compiler recurses through the expressions to find a terminal type to infer the type
+of the non-terminal expressions.
+You can do a similar thing, and pretend to be the compiler and recurse until you find a terminal
+type.
 Let's look at a more complicated example.
 
 [source, fsharp]
@@ -389,10 +394,11 @@ You have to do this since whitespace delimits arguments, so if the argument itse
 
 == Recursion versus Iteration
 
-A fundamental difference between recursion and iteration is that the recursive one requires no mutable variables.
-Therefore a guideline when to use recursion is when immutability provides a benefit, for example, in concurrent programming.
-The downside of recursion, is that it consumes stack space and recursing too deeply will eventually cause a stack overflow.
-There are ways to get around it using `fold` and/or `tail recursion`.
+A fundamental difference between recursion and iteration is that the recursive one requires no
+mutable variables. Therefore a guideline when to use recursion is when immutability provides a
+benefit, for example, in concurrent programming. The downside of recursion, is that it consumes
+stack space and recursing too deeply will eventually cause a stack overflow. There are ways to get
+around it using `fold` and/or `tail recursion`.
 
 .Recursive factorial in F#
 [source, fsharp]
@@ -415,16 +421,14 @@ let fac x =
 
 ===  Avoiding stack overflow when using recursion
 
-Most prorgrammers who haven't used functional langauges stay away from recursion because they were
-taught that it can create a stack overflow. There knowledge is lacking. Tail calls are a way to
-overcome the stackoverflow problem when using recurison. A non tail recursive function will store
-the state of the previous call to that function on the stack. This consumes memory on the stack each
-time the recursive function is invoked, possibly resulting in a stack overflow error depending on
-how deep the recursion goes and the stack size. Recursive functions that are tail recursive
-eliminate the need for the state to be tracked on the stack.
+You probably learnt early in your career that recursion was bad because it causes a stack overflow.
+However langauges that support tail recusion (also known as tail cail optimization) allow you to
+write recursive functions without worrying about stack overflow. The trick is to write the function
+in tail recursive manner.
 
 _How can you tell if a function is tail recursive?_ Look at the function and if the final thing it
-does is recurse then it is tail recursive.
+does is recurse then it is tail recursive. Recursive functions written like this need do not need to
+to store the state of the stack and it can be optimzed away.
 
 Note that the factorial function above is not tail recursive.
 The last thing that function does is multiply 2 values which contravenes the definiton of tail
@@ -457,8 +461,8 @@ let fac x =
 
 ----
 
-This function, `helper`, satisifies the test of a tail recursive function. The function called in it
-is the function itself.
+This function, `helper`, satisifies the test of a tail recursive function because it is last
+executed.
 
 === Fold
 
@@ -473,8 +477,12 @@ let l = [1;2;3]
 List.fold (fun acc x -> x + acc) 0 l
 ----
 
-The first parameter to `fold` is the function that operates on the accumulated value (state). It's a function of 2 parameters that takes the accumulator and an element from the list. The accumulator is used to thread the value between calls to the function. The second parameter is the initial value of the accumulator. In this case, because we want to sum the elements, we set it to 0.
-Internally `fold` uses a for loop and a mutable state variable, which means it's safe from stack overflow.
+The first parameter to `fold` is the function that operates on the accumulated value (state). It's a
+function of 2 parameters that takes the accumulator and an element from the list. The accumulator is
+used to thread the value between calls to the function. The second parameter is the initial value of
+the accumulator. In this case, because we want to sum the elements, we set it to 0. Internally
+`fold` uses a for loop and a mutable state variable that's not shared outside of the function, which
+means it's safe from stack overflow and thread safe.
 
 == Types
 
@@ -487,7 +495,8 @@ You'll be surprised when your program runs correctly for the first time.
 
 Personally, I think of programming in `F#` as programming in with shapes.
 The shapes are the types you define, and the functions morph the shapes.
-Along the way you fill in the shapes with untyped data, bringing type information to what was previously untyped, and safely transform the typed data with your functions.
+Along the way you fill in the shapes with untyped data, bringing type information to what was
+previously untyped, and safely transform the typed data with your functions.
 `F#` has enough power to peel apart these shapes, via pattern matching, and recombine them easily.
 
 === Type Inference
@@ -648,13 +657,139 @@ let mutable x = 1
 x <- 2
 ----
 
+== Using the higher order functions
+
+In this section we will go through common ways loops are used in imperative languages and show how
+those tasks can be achieved using the higher order functions of the container modules.
+Higher order functions are, loosely speaking, functions that operate on a container. For example the
+list module contains a set of fuctions like `map` and `fold`. Understanding when to use these
+functions is one of the challenges programmers from am OO or more imperative style of language face.
+Those langauges typically do not have a history of needing these functions and you can get away with
+writing a for loop to iterate over the container. However, in F#, where mutability isn't the
+default, there are patterns that emerge for working with containers and their contents, and they are
+emobodied in the higher order functions.
+
+===
+
+Say we have a collection of fruits in multiple baskets and we want all the oranges in one basket.
+The following shows how this might be modelled in C.
+
+[source, c]
+----
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
+enum Fruit {
+    Orange = 0,
+    Grape = 1,
+    Apple = 2
+};
+
+struct Basket {
+    int quantity;
+    enum Fruit fruit;
+};
+
+int main(int argc, char *argv[])
+{
+    int i;
+    int length = 4;
+    struct Basket fruits[length];
+    fruits[0].fruit = Orange;
+    fruits[0].quantity = 10;
+    fruits[1].fruit = Grape;
+    fruits[1].quantity = 20;
+    fruits[2].fruit = Apple;
+    fruits[2].quantity = 30;
+    fruits[3].fruit = Orange;
+    fruits[3].quantity = 2;
+
+    // Create a new basket for oranges
+    struct Basket oranges;
+    for (i = 0; i < length; i++)
+    {
+        if (fruits[i].fruit == Orange) {
+            oranges.quantity += fruits[i].quantity;
+            oranges.fruit = Orange;
+        }
+    }
+
+    printf("Total oranges: %d\n", oranges.quantity);
+
+    return 0;
+}
+----
+
+Points to note here are that it relies on mutable structures. The quantity of oranges is updated as
+the collection of fruits is processed, when we want to move the oranges into a basket.
+
+The equivalent `F#`, where mutation is not used, is this. 
+[source, fsharp]
+----
+type Fruit =
+    | Apple
+    | Grape
+    | Orange
+
+type FruitBasket =
+    | Empty
+    | Fruit of Fruit * int
+
+// list of fruits with quantities
+let fruits = [ Fruit (Apple, 2); Fruit (Grape, 3); Fruit (Orange, 1); Fruit (Orange, 3); ]
+
+let collectFruit (baskets: FruitBasket list) fruitToCollect : FruitBasket =
+    let quantity =
+        baskets
+        |> List.fold
+            (fun acc basket ->
+                match basket with
+                | Fruit(fruit, quantity) when fruit = fruitToCollect ->
+                    acc + quantity
+                | _ -> acc)
+            0
+    Fruit(fruitToCollect, quantity)
+
+collectFruit fruits Orange
+----
+
+The key higher order function used here is `fold` which allows one to pass an accumulator parameter
+through while iterating over each element in the list. `fold` takes 2 parameters, the `folder`
+function and the initial state, which in this case is `0`. The folder function itself is passed the
+accumulator parameter and a single element from the list. Because `F#` uses whitespace to seperate
+function arguments I've split each argument, the function and the intial state, onto new lines.
+
+A problem with `fold` is it can make the intent hard to decipher. We can rewrite this with `choose`
+which makes the intent easier to decipher.
+
+[source, fsharp]
+----
+let collectFruit (baskets: FruitBasket list) fruitToCollect : FruitBasket =
+    let quantity =
+        baskets
+        |> List.choose
+            (fun basket ->
+                match basket with
+                | Fruit(fruit, quantity) when fruit = fruitToCollect ->
+                    Some quantity
+                | _ -> None)
+        |> List.sum
+    Fruit(fruitToCollect, quantity)
+----
+
+
+Note that in both these cases the original basket remains unchanged. From a real world perspective
+this isn't realistic. We've magically duplicated the number of oranges.
+
 == Asynchronous programming
 
 One of `F#'s` core features is a model for asynchronous programming.
 Since then other languages have added support for asynchronous programming, in various ways.
 `F#` added it to the language based on an underlying extensible feature called _computation expressions_.
 Computation expressions essentially allow one to define a monadic type.
-However, all of this is already getting too academic, and detracting from the core of what I want to show, that is how to use `async expressions`.
+However, you don't need to understand monads to use async expressions. It's just good to be aware
+that everytime you are using an async expression it is a monad.
 
 === Problem
 The problem that `async` solves are the problems associated with callback funtions.
@@ -700,10 +835,22 @@ get |> Async.RunSynchronously
 ----
 
 There you go. That's it. The callback is really the stuff at the printfn line and beyond.
-This will look like magic to `C/C++` programmers. When I learned `F#` around 2010 it looked like magic to me.
+This will look like magic to {cpp} programmers. When I learned `F#` around 2010 it looked like magic to me.
 In fact it was mind-blowing. Now I could handle the same variable in scope and flow of control wasn't inverted.
 Now it's 2022 and a lot of languages have caught onto this paradigm and have some way to do asynchronous programming.
-Probably the most famous of these is `Go`. footnote:[It's interesting and somewhat scary to think that `F#` had a model for doing async before `Go` was born, yet the industry overlooked `F#` or didn't recognise that it had this quality that could have made many programmers jobs writing concurrent systems a lot easier. Why? A hive minded mentality from developers? Nobody gets blamed for using `C#` or `Java` for some enterprisey system. Java had a lot of hype in the 2000s, was the people's choice and came out of the underdog Sun Microsystems. They were Unix and they had beards, and that meant they must be smart, smarter than Microsoft the bad guy. All those factors combined to make it hard for F# to stand out despite what at the time was a killer feature that no other language had. Now it's 2022, most mainstream languages have some support for asynchronous programming, either cleanly or butchered into the language, and Oracle's the bad guy, Microsoft ship Linux inside Windows and own Github (two things Linus Torvalds created), and Sun Microsystems doesn't exist.]
+Probably the most famous of these is `Go`. 
+
+footnote:[It's evocative to think that `F#` had a model
+for doing async before `Go` was born, yet the industry overlooked `F#` or didn't recognise that it
+had this quality that could have made many programmers jobs writing concurrent systems a lot easier.
+Why? A hive minded mentality from developers? Nobody gets blamed for using `C#` or `Java` for some
+enterprisey system. Java had a lot of hype in the 2000s, was the people's choice and came out of the
+underdog Sun Microsystems. They were Unix and they had beards, and that meant they must be smart,
+smarter than Microsoft the bad guy. All those factors combined to make it hard for F# to stand out
+despite what at the time was a killer feature that no other language had. Now it's 2022, most
+mainstream languages have some support for asynchronous programming, either cleanly or butchered
+into the language, and Oracle's the bad guy, Microsoft ship Linux inside Windows and own Github (two
+things Linus Torvalds created), and Sun Microsystems doesn't exist.]
 
 Let's explain what's going on here.
 The `async { ... }` block is a _computation expression_. Don't worry about what that is for now, just know that it's another feature of the the language and you can define your own computation expressions.
@@ -849,5 +996,9 @@ In the case of statically resolved type parameters the function is selected at c
 
 == How to replace objects with closures
 
-Coming from an object oriented programming language you might struggle to see how to maintain state. The trick is to use a closure. Briefly a closure wraps the things it can see, like values, into it's environment and carries it around with it. This allows you to maintain state.
-For example say you wanted to keep track of the number of times a function is called. In an OO language you'd create an object and make the function a member. The member function increments a counter each time that member is called.
+Coming from an object oriented programming language you might struggle to see how to maintain state.
+The trick is to use a closure. Briefly a closure wraps the things it can see, like values, into it's
+environment and carries it around with it. This allows you to maintain state. For example say you
+wanted to keep track of the number of times a function is called. In an OO language you'd create an
+object and make the function a member. The member function increments a counter each time that
+member is called.
